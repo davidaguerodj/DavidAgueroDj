@@ -1,21 +1,24 @@
-// server.js - Backend para verificar pagos con Mercado Pago (versión 2025)
+// server.js - Backend + Frontend (Render ready)
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { MercadoPagoConfig, Payment } = require('mercadopago');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 🔐 Access Token (seguro en servidor)
+// 🔐 Mercado Pago config
 const client = new MercadoPagoConfig({
   accessToken: 'APP_USR-2478348030974812-091213-7332e56fc76719f66d7b22de819e94f5-2689080436'
 });
-
 const payment = new Payment(client);
 
 // 📦 Base de datos temporal
 const pagosPendientes = {};
+
+// 🌐 Servir archivo estático (index.html)
+app.use(express.static(__dirname));
 
 // 🔍 Ruta para verificar pago
 app.post('/verificar-pago', async (req, res) => {
