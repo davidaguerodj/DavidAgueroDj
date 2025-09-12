@@ -26,7 +26,7 @@
         
         body {
             background: linear-gradient(135deg, rgba(5, 5, 16, 0.9), rgba(10, 10, 30, 0.9)), 
-                        url('https://images.unsplash.com/photo-1516420386105-2c457373e59c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+                        url('https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
             background-size: cover;
             background-position: center;
             color: var(--text-primary);
@@ -936,11 +936,11 @@
         
         // Array de imágenes de fondo para rotar
         const backgroundImages = [
-            'https://images.unsplash.com/photo-1516420386105-2c457373e59c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-            'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-            'https://images.unsplash.com/photo-1614149162895-78d4b6a7a381?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-            'https://images.unsplash.com/photo-1569954534275-8a1a2595786c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-            'https://images.unsplash.com/photo-1558021160-28d6cd957e3a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+            'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+            'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+            'https://images.unsplash.com/photo-1533174072545-fdf318352cfd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+            'https://images.unsplash.com/photo-1607799279861-4dd4213f838b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+            'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
         ];
         
         let currentImageIndex = 0;
@@ -1042,14 +1042,16 @@
             if (checkingPayment) return;
             
             checkingPayment = true;
+            
+            // Simular un tiempo de verificación más largo (10 segundos)
             const checkInterval = setInterval(() => {
                 // Simulación de verificación de pago
                 // En una implementación real, aquí harías una llamada a la API de Mercado Pago
                 
-                // Para demostración, simulamos que el pago se verifica después de 5 segundos
+                // Para demostración, simulamos que el pago se verifica después de 10 segundos
                 const elapsed = Date.now() - new Date(paymentData.timestamp).getTime();
                 
-                if (elapsed > 5000) { // 5 segundos
+                if (elapsed > 10000) { // 10 segundos
                     clearInterval(checkInterval);
                     verifyPayment();
                 }
@@ -1143,8 +1145,8 @@
             // Codificar el mensaje para WhatsApp
             const encodedMessage = encodeURIComponent(message);
             
-            // Reemplazar con el número de WhatsApp del DJ
-            const whatsappUrl = `https://wa.me/5491123456789?text=${encodedMessage}`;
+            // Usar el número de WhatsApp proporcionado: 3834619831
+            const whatsappUrl = `https://wa.me/543834619831?text=${encodedMessage}`;
             
             // Abrir WhatsApp
             window.open(whatsappUrl, '_blank');
