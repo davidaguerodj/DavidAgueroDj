@@ -369,6 +369,17 @@
             box-shadow: 0 5px 20px rgba(225, 48, 108, 0.4);
         }
         
+        .btn-secondary {
+            background: rgba(153, 69, 255, 0.2);
+            color: var(--neon-primary);
+            border: 1px solid var(--neon-primary);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(153, 69, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
         .payment-section {
             text-align: center;
             margin: 35px 0;
@@ -771,6 +782,31 @@
             to { transform: rotate(360deg); }
         }
         
+        .another-request-section {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(153, 69, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(153, 69, 255, 0.1);
+            text-align: center;
+        }
+        
+        .another-request-section h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--neon-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 800;
+        }
+        
+        .another-request-section p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
         @media (max-width: 600px) {
             .container {
                 padding: 20px;
@@ -945,7 +981,14 @@
             <div class="selected-song-display" id="finalSongDisplay"></div>
             <p>Tu canción será reproducida pronto</p>
             <p>¡Disfruta de la fiesta!</p>
-            <button class="btn-primary" onclick="location.reload()">Pedir otra canción</button>
+            
+            <div class="another-request-section">
+                <h3><i class="fas fa-music"></i> ¿Quieres pedir otra canción?</h3>
+                <p>Puedes realizar otro pago para solicitar una canción adicional</p>
+                <button class="btn-secondary" onclick="requestAnotherSong()">
+                    <i class="fas fa-plus"></i> Pedir otra canción
+                </button>
+            </div>
         </div>
     </div>
     
@@ -960,6 +1003,7 @@
         let paymentVerified = false;
         let checkingPayment = false;
         let requestSent = false;
+        let paymentSessionId = '';
         
         // Array de imágenes de fondo para rotar
         const backgroundImages = [
@@ -975,6 +1019,51 @@
         // API Key de YouTube
         const YOUTUBE_API_KEY = 'AIzaSyC8Ih8ETEbnGIDLBZxP-XmLlG4l1L9xi7g';
         
+        // Función para generar un fingerprint del navegador
+        function generateFingerprint() {
+            const navigatorInfo = window.navigator;
+            const screenInfo = window.screen;
+            
+            // Combinar información del navegador y pantalla para crear un fingerprint simple
+            let fingerprint = navigatorInfo.userAgent.replace(/[^a-zA-Z0-9]/g, '');
+            fingerprint += screenInfo.height + '' + screenInfo.width + '' + screenInfo.colorDepth;
+            
+            // Hashear el fingerprint para hacerlo más corto
+            let hash = 0;
+            for (let i = 0; i < fingerprint.length; i++) {
+                const char = fingerprint.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash; // Convertir a entero de 32 bits
+            }
+            
+            return Math.abs(hash).toString(16);
+        }
+        
+        // Función para establecer una cookie
+        function setCookie(name, value, hours) {
+            const date = new Date();
+            date.setTime(date.getTime() + (hours * 60 * 60 * 1000));
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+        }
+        
+        // Función para obtener una cookie
+        function getCookie(name) {
+            const cname = name + "=";
+            const decodedCookie = decodeURIComponent(document.cookie);
+            const ca = decodedCookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(cname) === 0) {
+                    return c.substring(cname.length, c.length);
+                }
+            }
+            return "";
+        }
+        
         // Función para cambiar la imagen de fondo
         function changeBackground() {
             currentImageIndex = (currentImageIndex + 1) % backgroundImages.length;
@@ -986,43 +1075,88 @@
             const savedPaymentStatus = localStorage.getItem('paymentVerified');
             const savedTimestamp = localStorage.getItem('paymentTimestamp');
             const savedRequestSent = localStorage.getItem('requestSent');
+            const savedSessionId = localStorage.getItem('paymentSessionId');
+            const cookiePaymentStatus = getCookie('paymentVerified');
+            const cookieSessionId = getCookie('paymentSessionId');
+            const fingerprint = generateFingerprint();
+            const savedFingerprint = localStorage.getItem('fingerprint');
+            
+            // Verificar si el fingerprint coincide
+            if (savedFingerprint && savedFingerprint !== fingerprint) {
+                // El fingerprint no coincide, limpiar todo
+                localStorage.removeItem('paymentVerified');
+                localStorage.removeItem('paymentTimestamp');
+                localStorage.removeItem('requestSent');
+                localStorage.removeItem('paymentSessionId');
+                localStorage.removeItem('fingerprint');
+                setCookie('paymentVerified', '', -1);
+                setCookie('paymentSessionId', '', -1);
+                return;
+            }
             
             // Verificar si el pago está verificado y no ha expirado (24 horas)
-            if (savedPaymentStatus === 'true' && savedTimestamp) {
+            if (savedPaymentStatus === 'true' && savedTimestamp && savedSessionId) {
                 const currentTime = Date.now();
                 const paymentTime = parseInt(savedTimestamp);
                 const hoursSincePayment = (currentTime - paymentTime) / (1000 * 60 * 60);
                 
                 if (hoursSincePayment < 24) {
-                    verifyPayment();
-                    
-                    // Verificar si la solicitud ya fue enviada
-                    if (savedRequestSent === 'true') {
-                        requestSent = true;
-                        document.getElementById('sendButton').innerHTML = '<i class="fas fa-check"></i> Solicitud enviada';
-                        document.getElementById('sendButton').disabled = true;
+                    // Verificar que el sessionId coincida en localStorage y cookies
+                    if (savedSessionId === cookieSessionId && savedPaymentStatus === cookiePaymentStatus) {
+                        paymentSessionId = savedSessionId;
+                        verifyPayment();
+                        
+                        // Verificar si la solicitud ya fue enviada
+                        if (savedRequestSent === 'true') {
+                            requestSent = true;
+                            document.getElementById('sendButton').innerHTML = '<i class="fas fa-check"></i> Solicitud enviada';
+                            document.getElementById('sendButton').disabled = true;
+                        }
                     }
                 } else {
                     // El pago ha expirado
                     localStorage.removeItem('paymentVerified');
                     localStorage.removeItem('paymentTimestamp');
+                    localStorage.removeItem('paymentSessionId');
+                    setCookie('paymentVerified', '', -1);
+                    setCookie('paymentSessionId', '', -1);
                 }
             }
         }
         
         // Función para guardar el estado del pago
-        function savePaymentStatus(verified) {
+        function savePaymentStatus(verified, sessionId) {
             localStorage.setItem('paymentVerified', verified ? 'true' : 'false');
+            setCookie('paymentVerified', verified ? 'true' : 'false', 24);
+            
             if (verified) {
                 localStorage.setItem('paymentTimestamp', Date.now().toString());
+                localStorage.setItem('paymentSessionId', sessionId);
+                setCookie('paymentSessionId', sessionId, 24);
+                localStorage.setItem('fingerprint', generateFingerprint());
             } else {
                 localStorage.removeItem('paymentTimestamp');
+                localStorage.removeItem('paymentSessionId');
+                setCookie('paymentSessionId', '', -1);
             }
         }
         
         // Función para generar un ID de sesión único
         function generateSessionId() {
-            return 'session_' + Math.random().toString(36).substr(2, 9);
+            return 'session_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+        }
+        
+        // Función para formatear fecha y hora
+        function formatDateTime(date) {
+            const options = {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            return date.toLocaleString('es-ES', options);
         }
         
         // Inicializar
@@ -1247,7 +1381,9 @@
         function openPaymentLink() {
             // Generar un ID de sesión único para este pago
             const sessionId = generateSessionId();
+            paymentSessionId = sessionId;
             localStorage.setItem('paymentSessionId', sessionId);
+            setCookie('paymentSessionId', sessionId, 24);
             
             // Crear un elemento de enlace oculto
             const link = document.createElement('a');
@@ -1305,7 +1441,7 @@
                 // Verificar si hay información de pago pendiente en localStorage
                 const pendingPayment = JSON.parse(localStorage.getItem('pendingPayment') || '{}');
                 
-                if (pendingPayment.link === selectedPaymentLink) {
+                if (pendingPayment.link === selectedPaymentLink && pendingPayment.sessionId === paymentSessionId) {
                     // Simular que el pago se ha completado
                     verifyPayment();
                 } else {
@@ -1320,8 +1456,8 @@
         function verifyPayment() {
             paymentVerified = true;
             
-            // Guardar el estado del pago en localStorage
-            savePaymentStatus(true);
+            // Guardar el estado del pago en localStorage y cookies
+            savePaymentStatus(true, paymentSessionId);
             
             // Actualizar la interfaz
             const sendButton = document.getElementById('sendButton');
@@ -1367,16 +1503,25 @@
                 return;
             }
             
-            // Crear mensaje para WhatsApp
-            let message = `Hola DJ David Agüero, quiero solicitar una canción:\n\n`;
-            message += `Canción: ${song}\n`;
-            message += `Nombre: ${name}\n`;
+            // Obtener fecha y hora actual
+            const currentDateTime = new Date();
+            const formattedDateTime = formatDateTime(currentDateTime);
+            
+            // Crear mensaje para WhatsApp con información detallada
+            let message = `🎵 *SOLICITUD DE CANCIÓN* 🎵\n\n`;
+            message += `*Canción:* ${song}\n`;
+            message += `*Nombre:* ${name}\n`;
             
             if (dedication) {
-                message += `Dedicación: ${dedication}\n`;
+                message += `*Dedicación:* ${dedication}\n`;
             }
             
-            message += `\nPropina: $${selectedTipAmount}`;
+            message += `*Propina:* $${selectedTipAmount}\n`;
+            message += `*Fecha y hora del pago:* ${formattedDateTime}\n`;
+            message += `*ID de transacción:* ${paymentSessionId}\n\n`;
+            message += `⏱️ *Tiempo de espera estimado:* Hasta 20 minutos (dependiendo del género musical y el momento de la fiesta)\n\n`;
+            message += `ℹ️ *Aviso:* El DJ se reserva el derecho de aceptar o rechazar la canción según lo considere apropiado para el ambiente actual.\n\n`;
+            message += `Gracias por tu colaboración! 🙏`;
             
             // Crear enlace de WhatsApp
             const whatsappLink = `https://wa.me/543834619831?text=${encodeURIComponent(message)}`;
@@ -1410,6 +1555,47 @@
             document.getElementById('mainContent').style.display = 'none';
             document.getElementById('thankYouContent').style.display = 'block';
             document.getElementById('finalSongDisplay').textContent = song;
+        }
+        
+        // Función para solicitar otra canción
+        function requestAnotherSong() {
+            // Reiniciar el estado de la solicitud
+            requestSent = false;
+            paymentVerified = false;
+            localStorage.removeItem('requestSent');
+            localStorage.removeItem('paymentVerified');
+            localStorage.removeItem('paymentTimestamp');
+            setCookie('paymentVerified', '', -1);
+            
+            // Limpiar los campos del formulario
+            document.getElementById('song').value = '';
+            document.getElementById('name').value = '';
+            document.getElementById('dedication').value = '';
+            
+            // Ocultar las vistas previas de video
+            document.getElementById('videoPreviews').classList.remove('show');
+            
+            // Restablecer el botón de WhatsApp
+            const sendButton = document.getElementById('sendButton');
+            sendButton.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar solicitud por WhatsApp';
+            sendButton.disabled = true;
+            sendButton.classList.remove('verified');
+            
+            // Restablecer el estado de WhatsApp
+            const whatsappStatus = document.getElementById('whatsappStatus');
+            whatsappStatus.innerHTML = '<i class="fas fa-lock"></i> Completa el pago para desbloquear el envío de tu solicitud';
+            whatsappStatus.classList.remove('unlocked');
+            whatsappStatus.classList.add('locked');
+            
+            // Ocultar el mensaje de verificación de pago
+            document.getElementById('paymentVerified').style.display = 'none';
+            
+            // Mostrar el contenido principal y ocultar el mensaje de agradecimiento
+            document.getElementById('mainContent').style.display = 'block';
+            document.getElementById('thankYouContent').style.display = 'none';
+            
+            // Generar un nuevo ID de sesión para el próximo pago
+            paymentSessionId = generateSessionId();
         }
         
         // Función para contactar para contrataciones
