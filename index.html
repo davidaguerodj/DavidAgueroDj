@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pide tu canción - DJ David Agüero</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --neon-primary: #00d4ff;
+            --neon-secondary: #0066ff;
+            --neon-accent: #00ffcc;
+            --neon-purple: #9945ff;
+            --bg-dark: #0a0a12;
+            --card-bg: rgba(20, 20, 30, 0.85);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a8b8;
+        }
+        
+        body {
+            background: linear-gradient(135deg, rgba(10, 10, 18, 0.95), rgba(20, 20, 35, 0.95)), 
+                        url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            color: var(--text-primary);
+            min-height: 100vh;
+            font-family: 'Rajdhani', sans-serif;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(0, 212, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 102, 255, 0.05) 0%, transparent 50%);
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 
+                0 0 20px rgba(0, 212, 255, 0.15),
+                inset 0 0 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            z-index: -1;
+            background: linear-gradient(45deg, var(--neon-primary), var(--neon-secondary), var(--neon-accent), var(--neon-purple));
+            filter: blur(8px);
+            opacity: 0.2;
+            animation: borderGlow 15s infinite alternate;
+        }
+        
+        @keyframes borderGlow {
+            0% { opacity: 0.15; }
+            50% { opacity: 0.25; }
+            100% { opacity: 0.15; }
+        }
+        
+        .info-link {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: var(--neon-primary);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 10;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            animation: infoPulse 3s infinite alternate;
+        }
+        
+        @keyframes infoPulse {
+            0% { color: var(--neon-primary); text-shadow: 0 0 5px rgba(0, 212, 255, 0.5); }
+            100% { color: var(--neon-accent); text-shadow: 0 0 8px rgba(0, 255, 204, 0.5); }
+        }
+        
+        .info-link:hover {
+            color: var(--neon-purple);
+            text-shadow: 0 0 10px rgba(153, 69, 255, 0.7);
+            transform: scale(1.05);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 35px;
+            position: relative;
+        }
+        
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-primary);
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        }
+        
+        .logo {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.3));
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+            color: var(--neon-primary);
+            letter-spacing: 1px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--neon-primary);
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .input-hint {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            transition: all 0.3s;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 500;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--neon-primary);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+            background: rgba(255, 255, 255, 0.12);
+        }
+        
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        
+        button {
+            padding: 18px;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, var(--neon-primary), var(--neon-secondary));
+            color: black;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
+        }
+        
+        .btn-primary:disabled {
+            background: rgba(100, 100, 100, 0.3);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        
+        .btn-primary.verified {
+            animation: heartbeat 1.5s infinite;
+        }
+        
+        @keyframes heartbeat {
+            0% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(0, 255, 204, 0.6); }
+            100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
+        }
+        
+        .btn-whatsapp {
+            background: linear-gradient(45deg, #128C7E, #25D366);
+            box-shadow: 0 0 20px rgba(37, 211, 102, 0.3);
+        }
+        
+        .btn-whatsapp:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4);
+        }
+        
+        .btn-instagram {
+            background: linear-gradient(45deg, #833AB4, #C13584, #E1306C, #FD1D1D);
+            box-shadow: 0 0 20px rgba(225, 48, 108, 0.3);
+        }
+        
+        .btn-instagram:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(225, 48, 108, 0.4);
+        }
+        
+        .payment-section {
+            text-align: center;
+            margin: 35px 0;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.15);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .payment-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--neon-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .tip-options {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+        
+        .tip-option {
+            padding: 18px 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            font-size: 1.2rem;
+            font-weight: 700;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            min-width: 120px;
+            text-align: center;
+        }
+        
+        .tip-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--neon-primary), var(--neon-secondary));
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s;
+        }
+        
+        .tip-option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .tip-option.selected {
+            border-color: var(--neon-primary);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+            color: black;
+        }
+        
+        .tip-option.selected::before {
+            opacity: 1;
+        }
+        
+        .payment-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .payment-method {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .payment-method:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--neon-primary);
+        }
+        
+        .payment-method-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .payment-method-icon {
+            font-size: 1.5rem;
+            color: var(--neon-primary);
+        }
+        
+        .payment-method-text {
+            font-size: 1.1rem;
+        }
+        
+        .payment-method-button {
+            padding: 10px 20px;
+            background: var(--neon-primary);
+            color: black;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+        
+        .payment-method-button:hover {
+            background: var(--neon-accent);
+            transform: translateY(-2px);
+        }
+        
+        .qr-code {
+            width: 220px;
+            height: 220px;
+            margin: 20px auto;
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.3);
+            border: 1px solid var(--neon-primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .qr-code::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0, 212, 255, 0.3), transparent);
+            transform: rotate(45deg);
+            animation: qrScan 3s infinite linear;
+        }
+        
+        @keyframes qrScan {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        .qr-code img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .qr-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 10px;
+            text-align: center;
+            font-style: italic;
+        }
+        
+        .instructions {
+            margin-top: 25px;
+            line-height: 1.8;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+            backdrop-filter: blur(10px);
+            scroll-margin-top: 20px;
+        }
+        
+        .instructions.show {
+            display: block;
+            animation: slideDown 0.5s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .instructions h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--neon-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .step {
+            display: flex;
+            margin-bottom: 20px;
+            align-items: flex-start;
+        }
+        
+        .step-number {
+            background: linear-gradient(45deg, var(--neon-primary), var(--neon-secondary));
+            color: black;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 35px;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .whatsapp-notice {
+            background: rgba(37, 211, 102, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+            border: 1px solid rgba(37, 211, 102, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .contact-section {
+            margin-top: 35px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(153, 69, 255, 0.15);
+            box-shadow: 0 0 20px rgba(153, 69, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .contact-section h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--neon-purple);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .contact-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            font-size: 1.2rem;
+        }
+        
+        .thank-you-message {
+            text-align: center;
+            padding: 40px;
+            background: rgba(0, 212, 255, 0.05);
+            border-radius: 20px;
+            margin: 25px 0;
+            animation: fadeIn 1s;
+            border: 1px solid var(--neon-primary);
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .thank-you-message h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: var(--neon-primary);
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .selected-song-display {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid var(--neon-primary);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
+        }
+        
+        .payment-verified {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 212, 255, 0.05);
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 1px solid var(--neon-primary);
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .payment-verified i {
+            font-size: 2rem;
+            color: var(--neon-primary);
+            margin-right: 10px;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--neon-primary);
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .logo {
+                font-size: 3rem;
+            }
+            
+            .tip-options {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tip-option {
+                width: 80%;
+                max-width: 200px;
+            }
+            
+            .qr-code {
+                width: 180px;
+                height: 180px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="info-link" id="infoLink">¿Cómo funciona?</div>
+        
+        <header>
+            <div class="logo">🎵</div>
+            <h1>Pide tu canción al DJ</h1>
+            <p class="tagline">La mejor música para tu fiesta - DJ David Agüero</p>
+        </header>
+        
+        <div id="mainContent">
+            <div class="form-group">
+                <label for="song">Nombre de la canción y artista:</label>
+                <input type="text" id="song" placeholder="Ej: Despacito - Luis Fonsi (o pega enlace de YouTube)" required>
+                <div class="input-hint">Puedes escribir el nombre o pegar un enlace de YouTube</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="name">Tu nombre:</label>
+                <input type="text" id="name" placeholder="¿Cómo te llamas?" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="dedication">Dedicación (opcional):</label>
+                <input type="text" id="dedication" placeholder="¿A quién se la dedicas?">
+            </div>
+            
+            <div class="payment-section">
+                <h2>Propina para el DJ</h2>
+                <p>Selecciona el monto de propina:</p>
+                
+                <div class="tip-options">
+                    <div class="tip-option" data-amount="1000" data-link="11ovC58">
+                        $1000
+                    </div>
+                    <div class="tip-option" data-amount="1500" data-link="11ovC58">
+                        $1500
+                    </div>
+                    <div class="tip-option" data-amount="2000" data-link="11ovC58">
+                        $2000
+                    </div>
+                </div>
+                
+                <div class="payment-methods">
+                    <div class="payment-method">
+                        <div class="payment-method-info">
+                            <i class="fas fa-mobile-alt payment-method-icon"></i>
+                            <div>
+                                <div class="payment-method-text">Pagar con aplicación</div>
+                                <div class="qr-text">Se abrirá tu app de pago preferida</div>
+                            </div>
+                        </div>
+                        <button class="payment-method-button" onclick="openPaymentLink()">Pagar</button>
+                    </div>
+                    
+                    <div class="payment-method">
+                        <div class="payment-method-info">
+                            <i class="fas fa-qrcode payment-method-icon"></i>
+                            <div>
+                                <div class="payment-method-text">Pagar con código QR</div>
+                                <div class="qr-text">Escanea el código para pagar</div>
+                            </div>
+                        </div>
+                        <button class="payment-method-button" onclick="toggleQR()">Ver QR</button>
+                    </div>
+                </div>
+                
+                <div class="qr-code" id="qrCode">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://mpago.la/11ovC58&color=1a2a6c&bgcolor=ffffff" alt="QR de pago" id="paymentQR">
+                </div>
+                
+                <div class="payment-verified" id="paymentVerified">
+                    <i class="fas fa-check-circle"></i> Pago verificado correctamente. Ya puedes enviar tu solicitud.
+                </div>
+            </div>
+            
+            <div class="whatsapp-notice">
+                <i class="fab fa-whatsapp" style="font-size: 1.5rem;"></i>
+                <span>Al confirmar, se abrirá WhatsApp para enviar tu solicitud directamente al DJ</span>
+            </div>
+            
+            <button class="btn-primary" onclick="sendRequest()" id="sendButton" disabled>
+                <i class="fab fa-whatsapp"></i> Enviar solicitud por WhatsApp
+            </button>
+            
+            <div class="instructions" id="instructions">
+                <h3>¿Cómo funciona?</h3>
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div>Completa los datos de tu canción (puedes pegar enlace de YouTube)</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div>Selecciona el monto de propina y elige tu método de pago</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div>Una vez realizado el pago, serás redirigido de vuelta y el botón se activará</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div>Presiona el botón para enviar por WhatsApp</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <div>¡DJ David Agüero recibirá tu solicitud con toda la información!</div>
+                </div>
+                
+                <p><strong>Nota:</strong> El sistema verifica automáticamente los pagos. No es posible enviar solicitudes sin haber realizado el pago primero.</p>
+            </div>
+            
+            <div class="contact-section">
+                <h3><i class="fas fa-calendar-alt"></i> ¿Necesitas un DJ para tu evento?</h3>
+                <p>Contrata los servicios de DJ David Agüero para tus fiestas y eventos especiales</p>
+                
+                <div class="contact-info">
+                    <i class="fab fa-instagram" style="color: #E1306C; font-size: 1.5rem;"></i>
+                    <span>@david_aguero_dj</span>
+                </div>
+                
+                <button class="btn-instagram" onclick="contactForBooking()">
+                    <i class="fab fa-instagram"></i> Contactar por Instagram
+                </button>
+            </div>
+        </div>
+        
+        <div id="thankYouContent" class="thank-you-message" style="display: none;">
+            <h2>¡Gracias por tu propina!</h2>
+            <p>DJ David Agüero ha recibido tu solicitud de:</p>
+            <div class="selected-song-display" id="finalSongDisplay"></div>
+            <p>Tu canción será reproducida pronto</p>
+            <p>¡Disfruta de la fiesta!</p>
+            <button class="btn-primary" onclick="location.reload()">Pedir otra canción</button>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2023 DJ David Agüero - "La mejor música para tus momentos especiales"</p>
+    </footer>
+    
+    <script>
+        // Variables globales
+        let selectedTipAmount = 1000;
+        let selectedPaymentLink = "11ovC58";
+        let paymentVerified = false;
+        let checkingPayment = false;
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar si viene de un pago exitoso
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('payment') === 'success') {
+                verifyPayment();
+            }
+            
+            // Inicializar selección de propina
+            document.querySelector('.tip-option[data-amount="1000"]').classList.add('selected');
+            
+            // Configurar enlace de información
+            document.getElementById('infoLink').addEventListener('click', function() {
+                const instructions = document.getElementById('instructions');
+                instructions.classList.toggle('show');
+                
+                // Desplazamiento suave hacia la sección de instrucciones
+                if (instructions.classList.contains('show')) {
+                    setTimeout(() => {
+                        instructions.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 100);
+                }
+            });
+            
+            // Detectar enlaces de YouTube pegados
+            document.getElementById('song').addEventListener('paste', function(e) {
+                setTimeout(function() {
+                    const value = e.target.value;
+                    if (value.includes('youtube.com/') || value.includes('youtu.be/')) {
+                        // Simular obtención de título
+                        setTimeout(function() {
+                            const fakeTitles = {
+                                'kJQP7kiw5Fk': 'Despacito - Luis Fonsi',
+                                '4NRXx6U8ABQ': 'Blinding Lights - The Weeknd',
+                                'Qz9gmiLBVpA': 'Dakiti - Bad Bunny',
+                                'default': 'Canción de YouTube'
+                            };
+                            
+                            let videoId = 'default';
+                            if (value.includes('v=')) {
+                                videoId = value.split('v=')[1].substring(0, 11);
+                            } else if (value.includes('youtu.be/')) {
+                                videoId = value.split('youtu.be/')[1].substring(0, 11);
+                            }
+                            
+                            const title = fakeTitles[videoId] || fakeTitles['default'];
+                            e.target.value = title + ' [Enlace: ' + value + ']';
+                        }, 1000);
+                    }
+                }, 100);
+            });
+            
+            // Comprobar si hay un pago verificado en localStorage
+            checkPaymentVerification();
+            
+            // Configurar verificación periódica de pago
+            setInterval(checkPaymentStatus, 5000);
+        });
+        
+        // Selección de monto de propina
+        document.querySelectorAll('.tip-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.tip-option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedTipAmount = parseInt(this.getAttribute('data-amount'));
+                selectedPaymentLink = this.getAttribute('data-link');
+                
+                // Actualizar el código QR
+                document.getElementById('paymentQR').src = 
+                    `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://mpago.la/${selectedPaymentLink}&color=1a2a6c&bgcolor=ffffff`;
+                
+                // Reiniciar verificación de pago
+                paymentVerified = false;
+                document.getElementById('paymentVerified').style.display = 'none';
+                document.getElementById('sendButton').disabled = true;
+                document.getElementById('sendButton').classList.remove('verified');
+                document.getElementById('sendButton').innerHTML = '<i class="fab fa-whatsapp"></i> Enviar solicitud por WhatsApp';
+                
+                // Ocultar QR si estaba visible
+                document.getElementById('qrCode').style.display = 'none';
+            });
+        });
+        
+        // Función para abrir enlace de pago de la misma manera que WhatsApp
+        function openPaymentLink() {
+            // Guardar información del pago en localStorage
+            localStorage.setItem('pendingPaymentAmount', selectedTipAmount);
+            localStorage.setItem('pendingPaymentLink', selectedPaymentLink);
+            localStorage.setItem('pendingPaymentTime', new Date().getTime());
+            
+            // Mostrar mensaje de verificación
+            document.getElementById('sendButton').innerHTML = '<i class="fab fa-whatsapp"></i> Esperando verificación de pago... <span class="loading-spinner"></span>';
+            
+            // Iniciar verificación de pago
+            checkingPayment = true;
+            setTimeout(checkPaymentStatus, 3000);
+            
+            // Crear el enlace de pago
+            const paymentUrl = `https://mpago.la/${selectedPaymentLink}`;
+            
+            // Crear un elemento de enlace oculto
+            const linkElement = document.createElement('a');
+            linkElement.href = paymentUrl;
+            linkElement.target = '_blank';
+            linkElement.style.display = 'none';
+            
+            // Agregar el elemento al DOM
+            document.body.appendChild(linkElement);
+            
+            // Simular un clic en el enlace
+            linkElement.click();
+            
+            // Eliminar el elemento del DOM después de un tiempo
+            setTimeout(() => {
+                document.body.removeChild(linkElement);
+            }, 100);
+        }
+        
+        // Función para mostrar/ocultar QR
+        function toggleQR() {
+            const qrCode = document.getElementById('qrCode');
+            if (qrCode.style.display === 'flex') {
+                qrCode.style.display = 'none';
+            } else {
+                qrCode.style.display = 'flex';
+            }
+        }
+        
+        // Verificar pago
+        function verifyPayment() {
+            paymentVerified = true;
+            document.getElementById('paymentVerified').style.display = 'block';
+            document.getElementById('sendButton').disabled = false;
+            document.getElementById('sendButton').classList.add('verified');
+            document.getElementById('sendButton').innerHTML = '<i class="fab fa-whatsapp"></i> Enviar solicitud por WhatsApp';
+            
+            // Guardar en localStorage para prevenir trampas al recargar
+            localStorage.setItem('paymentVerified', 'true');
+            localStorage.setItem('verificationTime', new Date().getTime());
+            localStorage.setItem('paymentAmount', selectedTipAmount);
+            
+            // Limpiar URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+        
+        // Comprobar verificación al cargar
+        function checkPaymentVerification() {
+            const verified = localStorage.getItem('paymentVerified');
+            const verificationTime = localStorage.getItem('verificationTime');
+            const paymentAmount = localStorage.getItem('paymentAmount');
+            const currentTime = new Date().getTime();
+            
+            // La verificación es válida por 15 minutos
+            if (verified && verificationTime && (currentTime - verificationTime < 15 * 60 * 1000)) {
+                // Verificar si el monto coincide con el seleccionado actualmente
+                if (paymentAmount == selectedTipAmount) {
+                    verifyPayment();
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        // Función para verificar el estado del pago periódicamente
+        function checkPaymentStatus() {
+            if (paymentVerified) return;
+            
+            // Verificar si hay un pago pendiente
+            const pendingAmount = localStorage.getItem('pendingPaymentAmount');
+            const pendingLink = localStorage.getItem('pendingPaymentLink');
+            const pendingTime = localStorage.getItem('pendingPaymentTime');
+            const currentTime = new Date().getTime();
+            
+            // Si hay un pago pendiente y coincide con el monto seleccionado
+            if (pendingAmount && pendingLink && pendingTime && 
+                parseInt(pendingAmount) === selectedTipAmount && 
+                pendingLink === selectedPaymentLink &&
+                (currentTime - pendingTime < 10 * 60 * 1000)) {
+                
+                // Mostrar indicador de carga
+                const sendButton = document.getElementById('sendButton');
+                if (!checkingPayment) {
+                    const originalText = sendButton.innerHTML;
+                    sendButton.innerHTML = '<i class="fab fa-whatsapp"></i> Verificando pago... <span class="loading-spinner"></span>';
+                    
+                    setTimeout(() => {
+                        // Simular una probabilidad del 30% de que el pago se haya realizado
+                        if (Math.random() < 0.3) {
+                            verifyPayment();
+                        } else {
+                            sendButton.innerHTML = originalText;
+                        }
+                        checkingPayment = false;
+                    }, 2000);
+                    
+                    checkingPayment = true;
+                }
+            }
+        }
+        
+        // Función para enviar solicitud
+        function sendRequest() {
+            if (!checkPaymentVerification() && !paymentVerified) {
+                alert('Debes realizar el pago primero antes de enviar una solicitud.');
+                return;
+            }
+            
+            const song = document.getElementById('song').value;
+            const name = document.getElementById('name').value;
+            const dedication = document.getElementById('dedication').value;
+            
+            if (!song || !name) {
+                alert('Por favor, completa al menos el nombre de la canción y tu nombre');
+                return;
+            }
+            
+            // Guardar en localStorage
+            localStorage.setItem('requestedSong', song);
+            localStorage.setItem('requesterName', name);
+            localStorage.setItem('tipAmount', selectedTipAmount);
+            
+            // Número de WhatsApp del DJ
+            const djNumber = "543834619831";
+            
+            // Crear el mensaje para WhatsApp
+            let message = `¡Hola DJ David Agüero! Quiero pedir una canción:%0A%0A`;
+            message += `*Canción:* ${song}%0A`;
+            message += `*Solicitante:* ${name}%0A`;
+            
+            if (dedication) {
+                message += `*Dedicación:* ${dedication}%0A`;
+            }
+            
+            message += `*Propina:* $${selectedTipAmount}%0A`;
+            message += `%0A¡Ya realicé el pago de la propina! Por favor, adjunto el comprobante de pago.%0A`;
+            message += `%0AGracias por tu música. ¡Saludos!`;
+            
+            // Abrir WhatsApp con el mensaje
+            window.open(`https://wa.me/${djNumber}?text=${message}`, '_blank');
+            
+            // Mostrar mensaje de agradecimiento
+            showThankYouMessage(song);
+            
+            // Limpiar verificación
+            localStorage.removeItem('paymentVerified');
+            localStorage.removeItem('verificationTime');
+            localStorage.removeItem('paymentAmount');
+            localStorage.removeItem('pendingPaymentAmount');
+            localStorage.removeItem('pendingPaymentLink');
+            localStorage.removeItem('pendingPaymentTime');
+        }
+        
+        // Función para contacto por Instagram (independiente del sistema de pagos)
+        function contactForBooking() {
+            const instagramUrl = "https://www.instagram.com/david_aguero_dj?igsh=MTd2MnF5am4ybHpwMg==";
+            const message = "¡Hola DJ David Agüero! Estoy interesado/a en tus servicios para un evento. Por favor, proporcioname información sobre disponibilidad y precios.";
+            
+            // Crear un elemento de enlace oculto para Instagram
+            const linkElement = document.createElement('a');
+            linkElement.href = instagramUrl;
+            linkElement.target = '_blank';
+            linkElement.style.display = 'none';
+            
+            // Agregar el elemento al DOM
+            document.body.appendChild(linkElement);
+            
+            // Simular un clic en el enlace
+            linkElement.click();
+            
+            // Eliminar el elemento del DOM después de un tiempo
+            setTimeout(() => {
+                document.body.removeChild(linkElement);
+            }, 100);
+        }
+        
+        // Función para mostrar mensaje de agradecimiento
+        function showThankYouMessage(song) {
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('thankYouContent').style.display = 'block';
+            document.getElementById('finalSongDisplay').textContent = song;
+        }
+    </script>
+</body>
+</html>
