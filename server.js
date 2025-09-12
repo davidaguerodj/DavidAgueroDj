@@ -1,65 +1,47 @@
-// server.js - Backend para verificar pagos con Mercado Pago
-// Este archivo se ejecuta en el servidor (Render, Railway, etc.)
-
+// server.js - Backend para verificar pagos con Mercado Pago (versión 2025)
 const express = require('express');
 const cors = require('cors');
-const mercadopago = require('mercadopago');
+const { MercadoPagoConfig, Payment } = require('mercadopago');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 🔐 Access Token de Mercado Pago (seguro en el servidor)
-mercadopago.configurations.setAccessToken('APP_USR-2478348030974812-091213-7332e56fc76719f66d7b22de819e94f5-2689080436');
+// 🔐 Access Token (seguro en servidor)
+const client = new MercadoPagoConfig({
+  accessToken: 'APP_USR-2478348030974812-091213-7332e56fc76719f66d7b22de819e94f5-2689080436'
+});
 
-// 📦 Base de datos temporal (en producción usa MongoDB, Firebase, etc.)
+const payment = new Payment(client);
+
+// 📦 Base de datos temporal
 const pagosPendientes = {};
 
-// 🔍 Ruta para verificar si un pago fue aprobado
+// 🔍 Ruta para verificar pago
 app.post('/verificar-pago', async (req, res) => {
   const { sessionId } = req.body;
-
-  if (!sessionId) {
-    return res.status(400).json({ error: 'Falta sessionId' });
-  }
+  if (!sessionId) return res.status(400).json({ error: 'Falta sessionId' });
 
   try {
-    // Buscar el ID de pago asociado al sessionId
     const paymentId = pagosPendientes[sessionId];
+    if (!paymentId) return res.json({ aprobado: false });
 
-    if (!paymentId) {
-      return res.json({ aprobado: false, mensaje: 'No se encontró pago con ese sessionId' });
-    }
-
-    // Consultar el estado del pago en Mercado Pago
-    const response = await mercadopago.payment.findById(paymentId);
-    const pago = response.body;
-
-    if (pago.status === 'approved') {
-      res.json({ aprobado: true, monto: pago.transaction_amount });
-    } else {
-      res.json({ aprobado: false, estado: pago.status });
-    }
+    const response = await payment.get({ id: paymentId });
+    res.json({ aprobado: response.status === 'approved', monto: response.transaction_amount });
   } catch (error) {
-    console.error('❌ Error al verificar pago:', error);
-    res.status(500).json({ error: 'Error interno al verificar pago' });
+    console.error('❌ Error al verificar:', error);
+    res.status(500).json({ error: 'Error interno' });
   }
 });
 
-// 💳 Ruta para registrar un pago (cuando se crea)
+// 💳 Registrar pago
 app.post('/registrar-pago', (req, res) => {
   const { sessionId, paymentId } = req.body;
-
-  if (!sessionId || !paymentId) {
-    return res.status(400).json({ error: 'Faltan datos' });
-  }
-
+  if (!sessionId || !paymentId) return res.status(400).json({ error: 'Faltan datos' });
   pagosPendientes[sessionId] = paymentId;
-  res.json({ mensaje: 'Pago registrado correctamente' });
+  res.json({ mensaje: 'Pago registrado' });
 });
 
 // 🚀 Iniciar servidor
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`✅ Servidor corriendo en puerto ${PORT}`);
-});
+app.listen(PORT, () => console.log(`✅ Servidor en puerto ${PORT}`));
