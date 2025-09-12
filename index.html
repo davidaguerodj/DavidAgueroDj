@@ -34,6 +34,7 @@
             font-family: 'Rajdhani', sans-serif;
             position: relative;
             overflow-x: hidden;
+            transition: background-image 1s ease-in-out;
         }
         
         body::before {
@@ -163,6 +164,24 @@
             color: var(--text-secondary);
             margin-top: 5px;
             font-style: italic;
+        }
+        
+        .youtube-hint {
+            display: inline-block;
+            background: rgba(255, 0, 0, 0.1);
+            color: #ff4757;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 8px;
+            border: 1px solid rgba(255, 0, 0, 0.2);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
         }
         
         input, select {
@@ -783,10 +802,13 @@
             <div class="form-group">
                 <label for="song">Nombre de la canción y artista:</label>
                 <div style="position: relative;">
-                    <input type="text" id="song" placeholder="Ej: Despacito - Luis Fonsi (o pega enlace de YouTube)" required>
+                    <input type="text" id="song" placeholder="Ej: Despacito - Luis Fonsi" required>
                     <div class="suggestions" id="songSuggestions"></div>
                 </div>
-                <div class="input-hint">Puedes escribir el nombre o pegar un enlace de YouTube</div>
+                <div class="input-hint">Puedes escribir el nombre o pegar enlace de YouTube</div>
+                <div class="youtube-hint" id="youtubeHint">
+                    <i class="fab fa-youtube"></i> ¿No encuentras tu canción? Pega el enlace de YouTube aquí
+                </div>
                 <div class="video-previews" id="videoPreviews">
                     <h4>Selecciona una versión:</h4>
                     <div class="video-list" id="videoList"></div>
@@ -966,11 +988,14 @@
             document.body.style.backgroundImage = `linear-gradient(135deg, rgba(5, 5, 16, 0.9), rgba(10, 10, 30, 0.9)), url('${backgroundImages[currentImageIndex]}')`;
         }
         
-        // Cambiar la imagen de fondo cada 3.5 segundos
-        setInterval(changeBackground, 3500);
-        
         // Inicializar
         document.addEventListener('DOMContentLoaded', function() {
+            // Establecer la primera imagen de fondo
+            document.body.style.backgroundImage = `linear-gradient(135deg, rgba(5, 5, 16, 0.9), rgba(10, 10, 30, 0.9)), url('${backgroundImages[0]}')`;
+            
+            // Cambiar la imagen de fondo cada 3.5 segundos
+            setInterval(changeBackground, 3500);
+            
             // Verificar si viene de un pago exitoso
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('payment') === 'success') {
@@ -998,8 +1023,22 @@
             const suggestionsContainer = document.getElementById('songSuggestions');
             const videoPreviews = document.getElementById('videoPreviews');
             const videoList = document.getElementById('videoList');
+            const youtubeHint = document.getElementById('youtubeHint');
             
+            // Mostrar la pista de YouTube después de 2 segundos de inactividad
+            let inactivityTimer;
+            function showYouTubeHint() {
+                clearTimeout(inactivityTimer);
+                inactivityTimer = setTimeout(() => {
+                    youtubeHint.style.display = 'inline-block';
+                }, 2000);
+            }
+            
+            // Ocultar la pista cuando el usuario empieza a escribir
             songInput.addEventListener('input', function() {
+                clearTimeout(inactivityTimer);
+                youtubeHint.style.display = 'none';
+                
                 const value = this.value.toLowerCase();
                 if (value.length < 2) {
                     suggestionsContainer.style.display = 'none';
@@ -1007,6 +1046,7 @@
                     return;
                 }
                 
+                // Buscar coincidencias en nuestra base de datos local primero
                 const filteredSongs = popularSongs.filter(song => 
                     song.title.toLowerCase().includes(value) || 
                     song.artist.toLowerCase().includes(value)
@@ -1035,329 +1075,9 @@
                 }
             });
             
+            // Si el usuario no escribe nada por 5 segundos, mostrar la pista de YouTube
+            songInput.addEventListener('focus', function() {
+                showYouTubeHint();
+            });
+            
             // Función para mostrar vistas previas de videos
-            function showVideoPreviews(songTitle) {
-                videoPreviews.classList.add('show');
-                videoList.innerHTML = '';
-                
-                const matchingSongs = popularSongs.filter(song => 
-                    song.title.toLowerCase() === songTitle.toLowerCase()
-                );
-                
-                if (matchingSongs.length > 0) {
-                    // Mostrar hasta 3 videos de la misma canción
-                    const videosToShow = matchingSongs.slice(0, 3);
-                    
-                    videosToShow.forEach((song, index) => {
-                        const videoItem = document.createElement('div');
-                        videoItem.className = 'video-item';
-                        if (index === 0) videoItem.classList.add('selected');
-                        
-                        const thumbnail = document.createElement('div');
-                        thumbnail.className = 'video-thumbnail';
-                        thumbnail.style.backgroundImage = `url('https://img.youtube.com/vi/${song.videoId}/0.jpg')`;
-                        
-                        const duration = document.createElement('div');
-                        duration.className = 'video-duration';
-                        duration.textContent = song.duration;
-                        thumbnail.appendChild(duration);
-                        
-                        const title = document.createElement('div');
-                        title.className = 'video-title';
-                        title.textContent = `${song.title} - ${song.artist}`;
-                        
-                        videoItem.appendChild(thumbnail);
-                        videoItem.appendChild(title);
-                        
-                        videoItem.addEventListener('click', function() {
-                            // Eliminar la clase selected de todos los items
-                            document.querySelectorAll('.video-item').forEach(item => {
-                                item.classList.remove('selected');
-                            });
-                            // Añadir la clase selected al item seleccionado
-                            this.classList.add('selected');
-                            
-                            // Actualizar el valor del input
-                            songInput.value = `${song.title} - ${song.artist}`;
-                        });
-                        
-                        videoList.appendChild(videoItem);
-                    });
-                }
-            }
-            
-            // Ocultar sugerencias al hacer clic fuera
-            document.addEventListener('click', function(e) {
-                if (!songInput.contains(e.target) && !suggestionsContainer.contains(e.target) && !videoPreviews.contains(e.target)) {
-                    suggestionsContainer.style.display = 'none';
-                }
-            });
-            
-            // Detectar enlaces de YouTube pegados
-            songInput.addEventListener('paste', function(e) {
-                setTimeout(function() {
-                    const value = e.target.value;
-                    if (value.includes('youtube.com/') || value.includes('youtu.be/')) {
-                        // Extraer el ID del video de YouTube
-                        let videoId = '';
-                        if (value.includes('v=')) {
-                            videoId = value.split('v=')[1].substring(0, 11);
-                        } else if (value.includes('youtu.be/')) {
-                            videoId = value.split('youtu.be/')[1].substring(0, 11);
-                        }
-                        
-                        // Buscar la canción en la base de datos
-                        const song = popularSongs.find(s => s.videoId === videoId);
-                        
-                        if (song) {
-                            e.target.value = `${song.title} - ${song.artist} [Enlace: ${value}]`;
-                            showVideoPreviews(song.title);
-                        } else {
-                            e.target.value = `Canción de YouTube [Enlace: ${value}]`;
-                            suggestionsContainer.style.display = 'none';
-                            videoPreviews.classList.remove('show');
-                        }
-                    }
-                }, 100);
-            });
-            
-            // Comprobar si hay un pago verificado en localStorage
-            checkPaymentVerification();
-            
-            // Configurar verificación periódica de pago
-            setInterval(checkPaymentStatus, 5000);
-        });
-        
-        // Selección de monto de propina
-        document.querySelectorAll('.tip-option').forEach(option => {
-            option.addEventListener('click', function() {
-                document.querySelectorAll('.tip-option').forEach(opt => opt.classList.remove('selected'));
-                this.classList.add('selected');
-                selectedTipAmount = parseInt(this.getAttribute('data-amount'));
-                selectedPaymentLink = this.getAttribute('data-link');
-                
-                // Actualizar el código QR
-                document.getElementById('paymentQR').src = 
-                    `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://mpago.la/${selectedPaymentLink}&color=1a2a6c&bgcolor=ffffff`;
-                
-                // Reiniciar verificación de pago
-                paymentVerified = false;
-                document.getElementById('paymentVerified').style.display = 'none';
-                document.getElementById('sendButton').disabled = true;
-                document.getElementById('sendButton').classList.remove('verified');
-                document.getElementById('sendButton').innerHTML = '<i class="fab fa-whatsapp"></i> Enviar solicitud por WhatsApp';
-                
-                // Actualizar estado de WhatsApp
-                document.getElementById('whatsappStatus').innerHTML = '<i class="fas fa-lock"></i> Completa el pago para desbloquear el envío de tu solicitud';
-                document.getElementById('whatsappStatus').className = 'locked';
-                
-                // Ocultar QR si estaba visible
-                document.getElementById('qrCode').style.display = 'none';
-            });
-        });
-        
-        // Función para abrir enlace de pago de la misma manera que WhatsApp
-        function openPaymentLink() {
-            // Guardar información del pago en localStorage
-            localStorage.setItem('pendingPaymentAmount', selectedTipAmount);
-            localStorage.setItem('pendingPaymentLink', selectedPaymentLink);
-            localStorage.setItem('pendingPaymentTime', new Date().getTime());
-            
-            // Mostrar mensaje de verificación
-            document.getElementById('sendButton').innerHTML = '<i class="fab fa-whatsapp"></i> Esperando verificación de pago... <span class="loading-spinner"></span>';
-            
-            // Iniciar verificación de pago
-            checkingPayment = true;
-            setTimeout(checkPaymentStatus, 3000);
-            
-            // Crear el enlace de pago
-            const paymentUrl = `https://mpago.la/${selectedPaymentLink}`;
-            
-            // Crear un elemento de enlace oculto
-            const linkElement = document.createElement('a');
-            linkElement.href = paymentUrl;
-            linkElement.target = '_blank';
-            linkElement.style.display = 'none';
-            
-            // Agregar el elemento al DOM
-            document.body.appendChild(linkElement);
-            
-            // Simular un clic en el enlace
-            linkElement.click();
-            
-            // Eliminar el elemento del DOM después de un tiempo
-            setTimeout(() => {
-                document.body.removeChild(linkElement);
-            }, 100);
-        }
-        
-        // Función para mostrar/ocultar QR
-        function toggleQR() {
-            const qrCode = document.getElementById('qrCode');
-            if (qrCode.style.display === 'flex') {
-                qrCode.style.display = 'none';
-            } else {
-                qrCode.style.display = 'flex';
-            }
-        }
-        
-        // Verificar pago
-        function verifyPayment() {
-            paymentVerified = true;
-            document.getElementById('paymentVerified').style.display = 'block';
-            document.getElementById('sendButton').disabled = false;
-            document.getElementById('sendButton').classList.add('verified');
-            document.getElementById('sendButton').innerHTML = '<i class="fab fa-whatsapp"></i> Enviar solicitud por WhatsApp';
-            
-            // Actualizar estado de WhatsApp
-            document.getElementById('whatsappStatus').innerHTML = '<i class="fas fa-check-circle"></i> ¡Pago verificado! Ahora puedes enviar tu solicitud directamente al DJ';
-            document.getElementById('whatsappStatus').className = 'unlocked';
-            
-            // Guardar en localStorage para prevenir trampas al recargar
-            localStorage.setItem('paymentVerified', 'true');
-            localStorage.setItem('verificationTime', new Date().getTime());
-            localStorage.setItem('paymentAmount', selectedTipAmount);
-            
-            // Limpiar URL
-            window.history.replaceState({}, document.title, window.location.pathname);
-        }
-        
-        // Comprobar verificación al cargar
-        function checkPaymentVerification() {
-            const verified = localStorage.getItem('paymentVerified');
-            const verificationTime = localStorage.getItem('verificationTime');
-            const paymentAmount = localStorage.getItem('paymentAmount');
-            const currentTime = new Date().getTime();
-            
-            // La verificación es válida por 15 minutos
-            if (verified && verificationTime && (currentTime - verificationTime < 15 * 60 * 1000)) {
-                // Verificar si el monto coincide con el seleccionado actualmente
-                if (paymentAmount == selectedTipAmount) {
-                    verifyPayment();
-                    return true;
-                }
-            }
-            return false;
-        }
-        
-        // Función para verificar el estado del pago periódicamente
-        function checkPaymentStatus() {
-            if (paymentVerified) return;
-            
-            // Verificar si hay un pago pendiente
-            const pendingAmount = localStorage.getItem('pendingPaymentAmount');
-            const pendingLink = localStorage.getItem('pendingPaymentLink');
-            const pendingTime = localStorage.getItem('pendingPaymentTime');
-            const currentTime = new Date().getTime();
-            
-            // Si hay un pago pendiente y coincide con el monto seleccionado
-            if (pendingAmount && pendingLink && pendingTime && 
-                parseInt(pendingAmount) === selectedTipAmount && 
-                pendingLink === selectedPaymentLink &&
-                (currentTime - pendingTime < 10 * 60 * 1000)) {
-                
-                // Mostrar indicador de carga
-                const sendButton = document.getElementById('sendButton');
-                if (!checkingPayment) {
-                    const originalText = sendButton.innerHTML;
-                    sendButton.innerHTML = '<i class="fab fa-whatsapp"></i> Verificando pago... <span class="loading-spinner"></span>';
-                    
-                    setTimeout(() => {
-                        // Simular una probabilidad del 30% de que el pago se haya realizado
-                        if (Math.random() < 0.3) {
-                            verifyPayment();
-                        } else {
-                            sendButton.innerHTML = originalText;
-                        }
-                        checkingPayment = false;
-                    }, 2000);
-                    
-                    checkingPayment = true;
-                }
-            }
-        }
-        
-        // Función para enviar solicitud
-        function sendRequest() {
-            if (!checkPaymentVerification() && !paymentVerified) {
-                alert('Debes realizar el pago primero antes de enviar una solicitud.');
-                return;
-            }
-            
-            const song = document.getElementById('song').value;
-            const name = document.getElementById('name').value;
-            const dedication = document.getElementById('dedication').value;
-            
-            if (!song || !name) {
-                alert('Por favor, completa al menos el nombre de la canción y tu nombre');
-                return;
-            }
-            
-            // Guardar en localStorage
-            localStorage.setItem('requestedSong', song);
-            localStorage.setItem('requesterName', name);
-            localStorage.setItem('tipAmount', selectedTipAmount);
-            
-            // Número de WhatsApp del DJ
-            const djNumber = "543834619831";
-            
-            // Crear el mensaje para WhatsApp
-            let message = `¡Hola DJ David Agüero! Quiero pedir una canción:%0A%0A`;
-            message += `*Canción:* ${song}%0A`;
-            message += `*Solicitante:* ${name}%0A`;
-            
-            if (dedication) {
-                message += `*Dedicación:* ${dedication}%0A`;
-            }
-            
-            message += `*Propina:* $${selectedTipAmount}%0A`;
-            message += `%0A¡Ya realicé el pago de la propina! Por favor, adjunto el comprobante de pago.%0A`;
-            message += `%0AGracias por tu música. ¡Saludos!`;
-            
-            // Abrir WhatsApp con el mensaje
-            window.open(`https://wa.me/${djNumber}?text=${message}`, '_blank');
-            
-            // Mostrar mensaje de agradecimiento
-            showThankYouMessage(song);
-            
-            // Limpiar verificación
-            localStorage.removeItem('paymentVerified');
-            localStorage.removeItem('verificationTime');
-            localStorage.removeItem('paymentAmount');
-            localStorage.removeItem('pendingPaymentAmount');
-            localStorage.removeItem('pendingPaymentLink');
-            localStorage.removeItem('pendingPaymentTime');
-        }
-        
-        // Función para contacto por Instagram (independiente del sistema de pagos)
-        function contactForBooking() {
-            const instagramUrl = "https://www.instagram.com/david_aguero_dj?igsh=MTd2MnF5am4ybHpwMg==";
-            const message = "¡Hola DJ David Agüero! Estoy interesado/a en tus servicios para un evento. Por favor, proporcioname información sobre disponibilidad y precios.";
-            
-            // Crear un elemento de enlace oculto para Instagram
-            const linkElement = document.createElement('a');
-            linkElement.href = instagramUrl;
-            linkElement.target = '_blank';
-            linkElement.style.display = 'none';
-            
-            // Agregar el elemento al DOM
-            document.body.appendChild(linkElement);
-            
-            // Simular un clic en el enlace
-            linkElement.click();
-            
-            // Eliminar el elemento del DOM después de un tiempo
-            setTimeout(() => {
-                document.body.removeChild(linkElement);
-            }, 100);
-        }
-        
-        // Función para mostrar mensaje de agradecimiento
-        function showThankYouMessage(song) {
-            document.getElementById('mainContent').style.display = 'none';
-            document.getElementById('thankYouContent').style.display = 'block';
-            document.getElementById('finalSongDisplay').textContent = song;
-        }
-    </script>
-</body>
-</html>
