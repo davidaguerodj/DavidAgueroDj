@@ -1067,6 +1067,9 @@
         
         let currentImageIndex = 0;
         
+        // API Key de YouTube
+        const YOUTUBE_API_KEY = 'AIzaSyC8Ih8ETEbnGIDLBZxP-XmLlG4l1L9xi7g';
+        
         // Función para generar un fingerprint del navegador
         function generateFingerprint() {
             const navigatorInfo = window.navigator;
@@ -1302,63 +1305,159 @@
                 });
             });
             
-            // ✅ Nuevo autocompletado (usa tu backend)
-            async function buscarCanciones(query) {
-                if (query.length < 2) return [];
-                try {
-                    const res = await fetch(`/buscar-canciones?q=${encodeURIComponent(query)}`);
-                    const data = await res.json();
-                    return data;
-                } catch (err) {
-                    console.error('❌ Error buscando:', err);
-                    return [];
-                }
-            }
-            
-            // ✅ Conectamos con el input
+            // Configurar autocompletado para canciones con YouTube API
             const songInput = document.getElementById('song');
             const suggestionsContainer = document.getElementById('songSuggestions');
-            songInput.addEventListener('input', async () => {
-                const query = songInput.value.trim();
-                const sugerencias = await buscarCanciones(query);
-                mostrarSugerencias(sugerencias);
-            });
+            const videoPreviews = document.getElementById('videoPreviews');
+            const videoList = document.getElementById('videoList');
             
-            function mostrarSugerencias(lista) {
-                suggestionsContainer.innerHTML = '';
-                if (lista.length === 0) {
-                    suggestionsContainer.style.display = 'none';
+            let searchTimeout;
+            let isSelectingSuggestion = false;
+            
+            songInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                
+                // Si estamos seleccionando una sugerencia, no hacemos nada
+                if (isSelectingSuggestion) {
+                    isSelectingSuggestion = false;
                     return;
                 }
-                lista.forEach(item => {
-                    const div = document.createElement('div');
-                    div.className = 'suggestion-item';
-                    div.innerHTML = `${item.titulo} <span class="artist">${item.artista}</span>`;
-                    div.onclick = () => {
-                        songInput.value = `${item.titulo} - ${item.artista}`;
+                
+                const query = this.value.trim();
+                
+                if (query.length < 2) {
+                    suggestionsContainer.style.display = 'none';
+                    videoPreviews.classList.remove('show');
+                    return;
+                }
+                
+                // Verificar si es un enlace de YouTube
+                const youtubeRegex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/;
+                const match = query.match(youtubeRegex);
+                
+                if (match) {
+                    // Es un enlace de YouTube, obtener información del video
+                    getYouTubeVideoInfo(match[1]);
+                } else {
+                    // Es una búsqueda de texto
+                    searchTimeout = setTimeout(() => {
+                        searchYouTubeVideos(query);
+                    }, 500); // Esperar 500ms después de que el usuario deje de escribir
+                }
+            });
+            
+            // Función para buscar videos en YouTube
+            function searchYouTubeVideos(query) {
+                fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=5&key=${YOUTUBE_API_KEY}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.items && data.items.length > 0) {
+                            displaySearchResults(data.items);
+                        } else {
+                            suggestionsContainer.style.display = 'none';
+                            videoPreviews.classList.remove('show');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error al buscar videos de YouTube:', error);
                         suggestionsContainer.style.display = 'none';
-                        mostrarPreview(item);
-                    };
-                    suggestionsContainer.appendChild(div);
+                        videoPreviews.classList.remove('show');
+                    });
+            }
+            
+            // Función para mostrar los resultados de búsqueda
+            function displaySearchResults(videos) {
+                suggestionsContainer.innerHTML = '';
+                
+                videos.forEach(video => {
+                    const videoId = video.id.videoId;
+                    const title = video.snippet.title;
+                    const channel = video.snippet.channelTitle;
+                    
+                    const item = document.createElement('div');
+                    item.className = 'suggestion-item';
+                    item.innerHTML = `${title} <span class="artist">${channel}</span>`;
+                    item.addEventListener('click', function() {
+                        // Marcar que estamos seleccionando una sugerencia
+                        isSelectingSuggestion = true;
+                        
+                        // Actualizar el campo de entrada
+                        songInput.value = `${title} - ${channel}`;
+                        suggestionsContainer.style.display = 'none';
+                        getYouTubeVideoInfo(videoId);
+                    });
+                    suggestionsContainer.appendChild(item);
                 });
+                
                 suggestionsContainer.style.display = 'block';
+                
+                // No mostrar vista previa automáticamente para no ser intrusivo
             }
             
-            function mostrarPreview(item) {
-                const previews = document.getElementById('videoPreviews');
-                const list = document.getElementById('videoList');
-                list.innerHTML = `
-                    <div class="video-item selected" onclick="seleccionarVideo('${item.id}', '${item.titulo}', '${item.artista}')">
-                        <div class="video-thumbnail" style="background-image: url('${item.thumbnail}')"></div>
-                        <div class="video-title">${item.titulo} - ${item.artista}</div>
+            // Función para obtener información de un video específico de YouTube
+            function getYouTubeVideoInfo(videoId) {
+                fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${videoId}&key=${YOUTUBE_API_KEY}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.items && data.items.length > 0) {
+                            const video = data.items[0];
+                            const title = video.snippet.title;
+                            const channel = video.snippet.channelTitle;
+                            const duration = formatDuration(video.contentDetails.duration);
+                            const thumbnail = video.snippet.thumbnails.default.url;
+                            
+                            // Mostrar vista previa del video
+                            displayVideoPreview({
+                                id: videoId,
+                                title: title,
+                                artist: channel,
+                                duration: duration,
+                                thumbnail: thumbnail
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error al obtener información del video:', error);
+                    });
+            }
+            
+            // Función para formatear la duración del video
+            function formatDuration(duration) {
+                const match = duration.match(/PT(\d+)M(\d+)S/);
+                if (match) {
+                    return `${match[1]}:${match[2].padStart(2, '0')}`;
+                }
+                return '0:00';
+            }
+            
+            // Función para mostrar la vista previa del video
+            function displayVideoPreview(video) {
+                videoList.innerHTML = '';
+                
+                const videoItem = document.createElement('div');
+                videoItem.className = 'video-item selected';
+                videoItem.innerHTML = `
+                    <div class="video-thumbnail" style="background-image: url('${video.thumbnail}')">
+                        <div class="video-duration">${video.duration}</div>
                     </div>
+                    <div class="video-title">${video.title} - ${video.artist}</div>
                 `;
-                previews.classList.add('show');
-            }
-            
-            function seleccionarVideo(id, titulo, artista) {
-                songInput.value = `${titulo} - ${artista}`;
-                previews.classList.remove('show');
+                
+                videoItem.addEventListener('click', function() {
+                    // Remover la clase selected de todos los videos
+                    document.querySelectorAll('.video-item').forEach(item => {
+                        item.classList.remove('selected');
+                    });
+                    
+                    // Agregar la clase selected al video seleccionado
+                    this.classList.add('selected');
+                    
+                    // Actualizar el valor del input con la canción seleccionada
+                    songInput.value = `${video.title} - ${video.artist}`;
+                });
+                
+                videoList.appendChild(videoItem);
+                videoPreviews.classList.add('show');
             }
             
             // Función para actualizar el código QR
