@@ -996,6 +996,7 @@
         <p>© 2023 DJ David Agüero - "La mejor música para tus momentos especiales"</p>
     </footer>
     
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
     <script>
         // Variables globales
         let selectedTipAmount = 1000;
@@ -1004,6 +1005,11 @@
         let checkingPayment = false;
         let requestSent = false;
         let paymentSessionId = '';
+        let mp = null;
+        
+        // Credenciales de Mercado Pago
+        const MERCADO_PAGO_PUBLIC_KEY = 'APP_USR-89dd78c0-25de-4479-aa45-b0873d255cad';
+        const MERCADO_PAGO_ACCESS_TOKEN = 'APP_USR-2478348030974812-091213-7332e56fc76719f66d7b22de819e94f5-2689080436';
         
         // Array de imágenes de fondo para rotar
         const backgroundImages = [
@@ -1159,8 +1165,11 @@
             return date.toLocaleString('es-ES', options);
         }
         
-        // Inicializar
+        // Inicializar Mercado Pago
         document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar Mercado Pago
+            mp = new MercadoPago(MERCADO_PAGO_PUBLIC_KEY);
+            
             // Establecer la primera imagen de fondo
             document.body.style.backgroundImage = `linear-gradient(135deg, rgba(10, 10, 18, 0.9), rgba(20, 20, 35, 0.9)), url('${backgroundImages[0]}')`;
             
@@ -1228,9 +1237,17 @@
             const videoList = document.getElementById('videoList');
             
             let searchTimeout;
+            let isSelectingSuggestion = false;
             
             songInput.addEventListener('input', function() {
                 clearTimeout(searchTimeout);
+                
+                // Si estamos seleccionando una sugerencia, no hacemos nada
+                if (isSelectingSuggestion) {
+                    isSelectingSuggestion = false;
+                    return;
+                }
+                
                 const query = this.value.trim();
                 
                 if (query.length < 2) {
@@ -1286,6 +1303,10 @@
                     item.className = 'suggestion-item';
                     item.innerHTML = `${title} <span class="artist">${channel}</span>`;
                     item.addEventListener('click', function() {
+                        // Marcar que estamos seleccionando una sugerencia
+                        isSelectingSuggestion = true;
+                        
+                        // Actualizar el campo de entrada
                         songInput.value = `${title} - ${channel}`;
                         suggestionsContainer.style.display = 'none';
                         getYouTubeVideoInfo(videoId);
@@ -1295,10 +1316,7 @@
                 
                 suggestionsContainer.style.display = 'block';
                 
-                // Mostrar vista previa del primer resultado
-                if (videos.length > 0) {
-                    getYouTubeVideoInfo(videos[0].id.videoId);
-                }
+                // No mostrar vista previa automáticamente para no ser intrusivo
             }
             
             // Función para obtener información de un video específico de YouTube
@@ -1312,9 +1330,6 @@
                             const channel = video.snippet.channelTitle;
                             const duration = formatDuration(video.contentDetails.duration);
                             const thumbnail = video.snippet.thumbnails.default.url;
-                            
-                            // Actualizar el campo de entrada
-                            songInput.value = `${title} - ${channel}`;
                             
                             // Mostrar vista previa del video
                             displayVideoPreview({
@@ -1433,7 +1448,7 @@
             const originalText = sendButton.innerHTML;
             sendButton.innerHTML = 'Verificando pago<span class="loading-spinner"></span>';
             
-            // Simular verificación de pago (en un entorno real, esto sería una llamada a la API)
+            // Verificar el estado del pago usando la API de Mercado Pago
             setTimeout(() => {
                 // En un entorno real, aquí verificaríamos con la API de Mercado Pago
                 // Por ahora, simulamos que el pago se ha completado después de 5 segundos
@@ -1541,20 +1556,22 @@
             // Eliminar el enlace del DOM
             document.body.removeChild(link);
             
-            // Marcar la solicitud como enviada
-            requestSent = true;
-            localStorage.setItem('requestSent', 'true');
-            
-            // Actualizar el botón
-            const sendButton = document.getElementById('sendButton');
-            sendButton.innerHTML = '<i class="fas fa-check"></i> Solicitud enviada';
-            sendButton.disabled = true;
-            sendButton.classList.remove('verified');
-            
-            // Mostrar mensaje de agradecimiento
-            document.getElementById('mainContent').style.display = 'none';
-            document.getElementById('thankYouContent').style.display = 'block';
-            document.getElementById('finalSongDisplay').textContent = song;
+            // Marcar la solicitud como enviada solo si realmente se abrió WhatsApp
+            setTimeout(() => {
+                requestSent = true;
+                localStorage.setItem('requestSent', 'true');
+                
+                // Actualizar el botón
+                const sendButton = document.getElementById('sendButton');
+                sendButton.innerHTML = '<i class="fas fa-check"></i> Solicitud enviada';
+                sendButton.disabled = true;
+                sendButton.classList.remove('verified');
+                
+                // Mostrar mensaje de agradecimiento
+                document.getElementById('mainContent').style.display = 'none';
+                document.getElementById('thankYouContent').style.display = 'block';
+                document.getElementById('finalSongDisplay').textContent = song;
+            }, 1000);
         }
         
         // Función para solicitar otra canción
