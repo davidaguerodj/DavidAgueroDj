@@ -1,3 +1,6 @@
+// server.js - Backend para verificar pagos con Mercado Pago
+// Este archivo se ejecuta en el servidor (Render, Railway, etc.)
+
 const express = require('express');
 const cors = require('cors');
 const mercadopago = require('mercadopago');
@@ -6,10 +9,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 🔐 Configura tu Access Token (esto es seguro aquí)
+// 🔐 Access Token de Mercado Pago (seguro en el servidor)
 mercadopago.configurations.setAccessToken('APP_USR-2478348030974812-091213-7332e56fc76719f66d7b22de819e94f5-2689080436');
 
-// 📦 Simulación de base de datos temporal (en producción usa MongoDB, Firebase, etc.)
+// 📦 Base de datos temporal (en producción usa MongoDB, Firebase, etc.)
 const pagosPendientes = {};
 
 // 🔍 Ruta para verificar si un pago fue aprobado
@@ -21,14 +24,14 @@ app.post('/verificar-pago', async (req, res) => {
   }
 
   try {
-    // 🔍 Buscar el ID de pago asociado al sessionId
+    // Buscar el ID de pago asociado al sessionId
     const paymentId = pagosPendientes[sessionId];
 
     if (!paymentId) {
       return res.json({ aprobado: false, mensaje: 'No se encontró pago con ese sessionId' });
     }
 
-    // ✅ Consultar el estado del pago en Mercado Pago
+    // Consultar el estado del pago en Mercado Pago
     const response = await mercadopago.payment.findById(paymentId);
     const pago = response.body;
 
@@ -58,5 +61,5 @@ app.post('/registrar-pago', (req, res) => {
 // 🚀 Iniciar servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`✅ Servidor corriendo en puerto ${PORT}`);
 });
