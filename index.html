@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pide tu canción - DJ David Agüero</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -32,6 +32,7 @@
             color: var(--text-primary);
             min-height: 100vh;
             font-family: 'Rajdhani', sans-serif;
+            font-weight: 500;
             position: relative;
             overflow-x: hidden;
             transition: background-image 1s ease-in-out;
@@ -122,7 +123,7 @@
         h1 {
             font-family: 'Orbitron', sans-serif;
             font-size: 2.5rem;
-            font-weight: 700;
+            font-weight: 800;
             margin-bottom: 15px;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -138,7 +139,7 @@
         
         .tagline {
             font-size: 1.2rem;
-            font-weight: 300;
+            font-weight: 500;
             margin-bottom: 10px;
             color: var(--neon-primary);
             letter-spacing: 1px;
@@ -152,7 +153,7 @@
         label {
             display: block;
             margin-bottom: 10px;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--neon-primary);
             font-size: 1.1rem;
             text-transform: uppercase;
@@ -161,27 +162,18 @@
         
         .input-hint {
             font-size: 0.9rem;
+            font-weight: 500;
             color: var(--text-secondary);
             margin-top: 5px;
             font-style: italic;
         }
         
         .youtube-hint {
-            display: inline-block;
-            background: rgba(255, 0, 0, 0.1);
-            color: #ff4757;
-            padding: 5px 10px;
-            border-radius: 20px;
             font-size: 0.8rem;
-            margin-top: 8px;
-            border: 1px solid rgba(255, 0, 0, 0.2);
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 5px;
+            font-style: italic;
         }
         
         input, select {
@@ -195,7 +187,7 @@
             border: 1px solid rgba(153, 69, 255, 0.2);
             transition: all 0.3s;
             font-family: 'Rajdhani', sans-serif;
-            font-weight: 500;
+            font-weight: 600;
         }
         
         input:focus, select:focus {
@@ -229,6 +221,7 @@
             cursor: pointer;
             transition: all 0.2s;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-weight: 500;
         }
         
         .suggestion-item:last-child {
@@ -261,6 +254,7 @@
             color: var(--neon-primary);
             margin-bottom: 10px;
             font-size: 1rem;
+            font-weight: 600;
         }
         
         .video-list {
@@ -302,6 +296,7 @@
         .video-title {
             margin-top: 5px;
             font-size: 0.8rem;
+            font-weight: 500;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -314,6 +309,7 @@
             background: rgba(0, 0, 0, 0.7);
             color: white;
             font-size: 0.7rem;
+            font-weight: 500;
             padding: 2px 5px;
             border-radius: 3px;
         }
@@ -392,6 +388,11 @@
             color: var(--neon-primary);
             text-transform: uppercase;
             letter-spacing: 1px;
+            font-weight: 800;
+        }
+        
+        .payment-section p {
+            font-weight: 500;
         }
         
         .tip-options {
@@ -482,6 +483,16 @@
         
         .payment-method-text {
             font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        .qr-text {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-top: 5px;
+            text-align: center;
+            font-style: italic;
         }
         
         .payment-method-button {
@@ -542,14 +553,6 @@
             z-index: 1;
         }
         
-        .qr-text {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-top: 10px;
-            text-align: center;
-            font-style: italic;
-        }
-        
         .instructions {
             margin-top: 25px;
             line-height: 1.8;
@@ -579,6 +582,7 @@
             color: var(--neon-primary);
             text-transform: uppercase;
             letter-spacing: 1px;
+            font-weight: 800;
         }
         
         .step {
@@ -601,6 +605,7 @@
             flex-shrink: 0;
             box-shadow: 0 0 15px rgba(153, 69, 255, 0.3);
             font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
         }
         
         footer {
@@ -610,6 +615,7 @@
             color: var(--text-secondary);
             padding: 20px;
             border-top: 1px solid rgba(255, 255, 255, 0.08);
+            font-weight: 500;
         }
         
         .whatsapp-section {
@@ -628,17 +634,20 @@
             color: #25D366;
             text-transform: uppercase;
             letter-spacing: 1px;
+            font-weight: 800;
         }
         
         .whatsapp-section p {
             margin-bottom: 15px;
             font-size: 1.1rem;
+            font-weight: 500;
         }
         
         .whatsapp-section .locked {
             color: var(--text-secondary);
             font-style: italic;
             margin-bottom: 15px;
+            font-weight: 500;
         }
         
         .whatsapp-section .unlocked {
@@ -665,6 +674,11 @@
             color: var(--neon-purple);
             text-transform: uppercase;
             letter-spacing: 1px;
+            font-weight: 800;
+        }
+        
+        .contact-section p {
+            font-weight: 500;
         }
         
         .contact-info {
@@ -674,6 +688,7 @@
             gap: 15px;
             margin: 20px 0;
             font-size: 1.2rem;
+            font-weight: 500;
         }
         
         .thank-you-message {
@@ -701,6 +716,11 @@
             text-shadow: 0 0 10px rgba(153, 69, 255, 0.3);
             text-transform: uppercase;
             letter-spacing: 1px;
+            font-weight: 800;
+        }
+        
+        .thank-you-message p {
+            font-weight: 500;
         }
         
         .selected-song-display {
@@ -730,6 +750,10 @@
             font-size: 2rem;
             color: var(--neon-primary);
             margin-right: 10px;
+        }
+        
+        .payment-verified span {
+            font-weight: 600;
         }
         
         .loading-spinner {
@@ -797,9 +821,7 @@
                     <div class="suggestions" id="songSuggestions"></div>
                 </div>
                 <div class="input-hint">Puedes escribir el nombre o pegar enlace de YouTube</div>
-                <div class="youtube-hint" id="youtubeHint">
-                    <i class="fab fa-youtube"></i> ¿No encuentras tu canción? Pega el enlace de YouTube aquí
-                </div>
+                <div class="youtube-hint">(También puedes pegar un enlace de YouTube)</div>
                 <div class="video-previews" id="videoPreviews">
                     <h4>Selecciona una versión:</h4>
                     <div class="video-list" id="videoList"></div>
@@ -861,7 +883,7 @@
                 </div>
                 
                 <div class="payment-verified" id="paymentVerified">
-                    <i class="fas fa-check-circle"></i> Pago verificado correctamente. Ya puedes enviar tu solicitud.
+                    <i class="fas fa-check-circle"></i> <span>Pago verificado correctamente. Ya puedes enviar tu solicitud.</span>
                 </div>
             </div>
             
@@ -937,6 +959,7 @@
         let selectedPaymentLink = "11ovC58";
         let paymentVerified = false;
         let checkingPayment = false;
+        let requestSent = false;
         
         // Array de imágenes de fondo para rotar
         const backgroundImages = [
@@ -949,34 +972,57 @@
         
         let currentImageIndex = 0;
         
-        // Base de datos de canciones populares para autocompletar
-        const popularSongs = [
-            { title: "Despacito", artist: "Luis Fonsi ft. Daddy Yankee", videoId: "kJQP7kiw5Fk", duration: "3:48" },
-            { title: "Blinding Lights", artist: "The Weeknd", videoId: "4NRXx6U8ABQ", duration: "3:20" },
-            { title: "Dakiti", artist: "Bad Bunny & Jhay Cortez", videoId: "Qz9gmiLBVpA", duration: "3:15" },
-            { title: "Shape of You", artist: "Ed Sheeran", videoId: "JGwWNGJdvx8", duration: "3:53" },
-            { title: "Tusa", artist: "KAROL G & Nicki Minaj", videoId: "79Mfy718x1s", duration: "3:20" },
-            { title: "Dákiti", artist: "Bad Bunny & Jhay Cortez", videoId: "Ojp7z_IQPy4", duration: "3:15" },
-            { title: "Hawái", artist: "Maluma", videoId: "yGSt6nKmPCs", duration: "3:20" },
-            { title: "Safaera", artist: "Bad Bunny, Jowell & Randy & Ñejo", videoId: "iI0CdxN8Qjg", duration: "4:50" },
-            { title: "Agua", artist: "J Balvin & Tainy", videoId: "qYK9O3wVWeM", duration: "3:05" },
-            { title: "La Canción", artist: "J Balvin & Bad Bunny", videoId: "WI329-VizJg", duration: "4:20" },
-            { title: "Mía", artist: "Bad Bunny ft. Drake", videoId: "KWZGAExj-eM", duration: "3:30" },
-            { title: "Callaíta", artist: "Bad Bunny & Tainy", videoId: "CLioaLjMQo0", duration: "3:25" },
-            { title: "Otro Trago", artist: "Sech, Darell & Nicky Jam", videoId: "1QQDKSw5ZTE", duration: "4:50" },
-            { title: "China", artist: "Anuel AA, Daddy Yankee, Karol G, J Balvin & Ozuna", videoId: "iI0CdxN8Qjg", duration: "5:20" },
-            { title: "Te Bote", artist: "Casper Mágico, Nio García, Darell, Nicky Jam & Bad Bunny", videoId: "yGSt6nKmPCs", duration: "5:10" },
-            { title: "X", artist: "Nicki Minaj & 6ix9ine", videoId: "DkeiKb4UaD4", duration: "3:30" },
-            { title: "Con Calma", artist: "Daddy Yankee & Snow", videoId: "41YubZp_nbg", duration: "3:20" },
-            { title: "No Me Conoce", artist: "Jhay Cortez, J Balvin & Bad Bunny", videoId: "CLioaLjMQo0", duration: "4:20" },
-            { title: "Soltera", artist: "Becky G & Maluma", videoId: "yGSt6nKmPCs", duration: "3:30" },
-            { title: "Que Tire Pa Lante", artist: "Daddy Yankee & Snow", videoId: "41YubZp_nbg", duration: "3:20" }
-        ];
+        // API Key de YouTube
+        const YOUTUBE_API_KEY = 'AIzaSyC8Ih8ETEbnGIDLBZxP-XmLlG4l1L9xi7g';
         
         // Función para cambiar la imagen de fondo
         function changeBackground() {
             currentImageIndex = (currentImageIndex + 1) % backgroundImages.length;
             document.body.style.backgroundImage = `linear-gradient(135deg, rgba(10, 10, 18, 0.9), rgba(20, 20, 35, 0.9)), url('${backgroundImages[currentImageIndex]}')`;
+        }
+        
+        // Función para verificar si hay un pago verificado guardado
+        function checkSavedPaymentStatus() {
+            const savedPaymentStatus = localStorage.getItem('paymentVerified');
+            const savedTimestamp = localStorage.getItem('paymentTimestamp');
+            const savedRequestSent = localStorage.getItem('requestSent');
+            
+            // Verificar si el pago está verificado y no ha expirado (24 horas)
+            if (savedPaymentStatus === 'true' && savedTimestamp) {
+                const currentTime = Date.now();
+                const paymentTime = parseInt(savedTimestamp);
+                const hoursSincePayment = (currentTime - paymentTime) / (1000 * 60 * 60);
+                
+                if (hoursSincePayment < 24) {
+                    verifyPayment();
+                    
+                    // Verificar si la solicitud ya fue enviada
+                    if (savedRequestSent === 'true') {
+                        requestSent = true;
+                        document.getElementById('sendButton').innerHTML = '<i class="fas fa-check"></i> Solicitud enviada';
+                        document.getElementById('sendButton').disabled = true;
+                    }
+                } else {
+                    // El pago ha expirado
+                    localStorage.removeItem('paymentVerified');
+                    localStorage.removeItem('paymentTimestamp');
+                }
+            }
+        }
+        
+        // Función para guardar el estado del pago
+        function savePaymentStatus(verified) {
+            localStorage.setItem('paymentVerified', verified ? 'true' : 'false');
+            if (verified) {
+                localStorage.setItem('paymentTimestamp', Date.now().toString());
+            } else {
+                localStorage.removeItem('paymentTimestamp');
+            }
+        }
+        
+        // Función para generar un ID de sesión único
+        function generateSessionId() {
+            return 'session_' + Math.random().toString(36).substr(2, 9);
         }
         
         // Inicializar
@@ -987,10 +1033,19 @@
             // Cambiar la imagen de fondo cada 3.5 segundos
             setInterval(changeBackground, 3500);
             
+            // Verificar si hay un pago verificado guardado
+            checkSavedPaymentStatus();
+            
             // Verificar si viene de un pago exitoso
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('payment') === 'success') {
-                verifyPayment();
+                // Verificar si el ID de sesión coincide
+                const sessionId = urlParams.get('session_id');
+                const savedSessionId = localStorage.getItem('paymentSessionId');
+                
+                if (sessionId && sessionId === savedSessionId) {
+                    verifyPayment();
+                }
             }
             
             // Inicializar selección de propina
@@ -1032,109 +1087,153 @@
                 });
             });
             
-            // Configurar autocompletado para canciones
+            // Configurar autocompletado para canciones con YouTube API
             const songInput = document.getElementById('song');
             const suggestionsContainer = document.getElementById('songSuggestions');
             const videoPreviews = document.getElementById('videoPreviews');
             const videoList = document.getElementById('videoList');
-            const youtubeHint = document.getElementById('youtubeHint');
             
-            // Mostrar la pista de YouTube después de 2 segundos de inactividad
-            let inactivityTimer;
-            function showYouTubeHint() {
-                clearTimeout(inactivityTimer);
-                inactivityTimer = setTimeout(() => {
-                    youtubeHint.style.display = 'inline-block';
-                }, 2000);
-            }
+            let searchTimeout;
             
-            // Ocultar la pista cuando el usuario empieza a escribir
             songInput.addEventListener('input', function() {
-                clearTimeout(inactivityTimer);
-                youtubeHint.style.display = 'none';
+                clearTimeout(searchTimeout);
+                const query = this.value.trim();
                 
-                const value = this.value.toLowerCase();
-                if (value.length < 2) {
+                if (query.length < 2) {
                     suggestionsContainer.style.display = 'none';
                     videoPreviews.classList.remove('show');
                     return;
                 }
                 
-                // Buscar coincidencias en nuestra base de datos local primero
-                const filteredSongs = popularSongs.filter(song => 
-                    song.title.toLowerCase().includes(value) || 
-                    song.artist.toLowerCase().includes(value)
-                );
+                // Verificar si es un enlace de YouTube
+                const youtubeRegex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/;
+                const match = query.match(youtubeRegex);
                 
-                if (filteredSongs.length > 0) {
-                    suggestionsContainer.innerHTML = '';
-                    filteredSongs.forEach(song => {
-                        const item = document.createElement('div');
-                        item.className = 'suggestion-item';
-                        item.innerHTML = `${song.title} <span class="artist">${song.artist}</span>`;
-                        item.addEventListener('click', function() {
-                            songInput.value = `${song.title} - ${song.artist}`;
-                            suggestionsContainer.style.display = 'none';
-                            showVideoPreviews(song.title);
-                        });
-                        suggestionsContainer.appendChild(item);
-                    });
-                    suggestionsContainer.style.display = 'block';
-                    
-                    // Mostrar vista previa del primer resultado
-                    showVideoPreviews(filteredSongs[0].title);
+                if (match) {
+                    // Es un enlace de YouTube, obtener información del video
+                    getYouTubeVideoInfo(match[1]);
                 } else {
-                    suggestionsContainer.style.display = 'none';
-                    videoPreviews.classList.remove('show');
+                    // Es una búsqueda de texto
+                    searchTimeout = setTimeout(() => {
+                        searchYouTubeVideos(query);
+                    }, 500); // Esperar 500ms después de que el usuario deje de escribir
                 }
             });
             
-            // Si el usuario no escribe nada por 5 segundos, mostrar la pista de YouTube
-            songInput.addEventListener('focus', function() {
-                showYouTubeHint();
-            });
+            // Función para buscar videos en YouTube
+            function searchYouTubeVideos(query) {
+                fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=5&key=${YOUTUBE_API_KEY}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.items && data.items.length > 0) {
+                            displaySearchResults(data.items);
+                        } else {
+                            suggestionsContainer.style.display = 'none';
+                            videoPreviews.classList.remove('show');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error al buscar videos de YouTube:', error);
+                        suggestionsContainer.style.display = 'none';
+                        videoPreviews.classList.remove('show');
+                    });
+            }
             
-            // Función para mostrar vistas previas de videos
-            function showVideoPreviews(songTitle) {
-                // Filtrar canciones que coincidan con el título
-                const matchingSongs = popularSongs.filter(song => 
-                    song.title.toLowerCase() === songTitle.toLowerCase()
-                );
+            // Función para mostrar los resultados de búsqueda
+            function displaySearchResults(videos) {
+                suggestionsContainer.innerHTML = '';
                 
-                if (matchingSongs.length > 0) {
-                    videoList.innerHTML = '';
+                videos.forEach(video => {
+                    const videoId = video.id.videoId;
+                    const title = video.snippet.title;
+                    const channel = video.snippet.channelTitle;
                     
-                    // Mostrar hasta 3 versiones de la canción
-                    const maxVideos = Math.min(matchingSongs.length, 3);
-                    for (let i = 0; i < maxVideos; i++) {
-                        const song = matchingSongs[i];
-                        const videoItem = document.createElement('div');
-                        videoItem.className = 'video-item';
-                        videoItem.innerHTML = `
-                            <div class="video-thumbnail" style="background-image: url('https://img.youtube.com/vi/${song.videoId}/default.jpg')">
-                                <div class="video-duration">${song.duration}</div>
-                            </div>
-                            <div class="video-title">${song.title} - ${song.artist}</div>
-                        `;
-                        
-                        videoItem.addEventListener('click', function() {
-                            // Remover la clase selected de todos los videos
-                            document.querySelectorAll('.video-item').forEach(item => {
-                                item.classList.remove('selected');
-                            });
-                            
-                            // Agregar la clase selected al video seleccionado
-                            this.classList.add('selected');
-                            
-                            // Actualizar el valor del input con la canción seleccionada
-                            songInput.value = `${song.title} - ${song.artist}`;
-                        });
-                        
-                        videoList.appendChild(videoItem);
-                    }
-                    
-                    videoPreviews.classList.add('show');
+                    const item = document.createElement('div');
+                    item.className = 'suggestion-item';
+                    item.innerHTML = `${title} <span class="artist">${channel}</span>`;
+                    item.addEventListener('click', function() {
+                        songInput.value = `${title} - ${channel}`;
+                        suggestionsContainer.style.display = 'none';
+                        getYouTubeVideoInfo(videoId);
+                    });
+                    suggestionsContainer.appendChild(item);
+                });
+                
+                suggestionsContainer.style.display = 'block';
+                
+                // Mostrar vista previa del primer resultado
+                if (videos.length > 0) {
+                    getYouTubeVideoInfo(videos[0].id.videoId);
                 }
+            }
+            
+            // Función para obtener información de un video específico de YouTube
+            function getYouTubeVideoInfo(videoId) {
+                fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${videoId}&key=${YOUTUBE_API_KEY}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.items && data.items.length > 0) {
+                            const video = data.items[0];
+                            const title = video.snippet.title;
+                            const channel = video.snippet.channelTitle;
+                            const duration = formatDuration(video.contentDetails.duration);
+                            const thumbnail = video.snippet.thumbnails.default.url;
+                            
+                            // Actualizar el campo de entrada
+                            songInput.value = `${title} - ${channel}`;
+                            
+                            // Mostrar vista previa del video
+                            displayVideoPreview({
+                                id: videoId,
+                                title: title,
+                                artist: channel,
+                                duration: duration,
+                                thumbnail: thumbnail
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error al obtener información del video:', error);
+                    });
+            }
+            
+            // Función para formatear la duración del video
+            function formatDuration(duration) {
+                const match = duration.match(/PT(\d+)M(\d+)S/);
+                if (match) {
+                    return `${match[1]}:${match[2].padStart(2, '0')}`;
+                }
+                return '0:00';
+            }
+            
+            // Función para mostrar la vista previa del video
+            function displayVideoPreview(video) {
+                videoList.innerHTML = '';
+                
+                const videoItem = document.createElement('div');
+                videoItem.className = 'video-item selected';
+                videoItem.innerHTML = `
+                    <div class="video-thumbnail" style="background-image: url('${video.thumbnail}')">
+                        <div class="video-duration">${video.duration}</div>
+                    </div>
+                    <div class="video-title">${video.title} - ${video.artist}</div>
+                `;
+                
+                videoItem.addEventListener('click', function() {
+                    // Remover la clase selected de todos los videos
+                    document.querySelectorAll('.video-item').forEach(item => {
+                        item.classList.remove('selected');
+                    });
+                    
+                    // Agregar la clase selected al video seleccionado
+                    this.classList.add('selected');
+                    
+                    // Actualizar el valor del input con la canción seleccionada
+                    songInput.value = `${video.title} - ${video.artist}`;
+                });
+                
+                videoList.appendChild(videoItem);
+                videoPreviews.classList.add('show');
             }
             
             // Función para actualizar el código QR
@@ -1146,9 +1245,13 @@
         
         // Función para abrir el enlace de pago
         function openPaymentLink() {
+            // Generar un ID de sesión único para este pago
+            const sessionId = generateSessionId();
+            localStorage.setItem('paymentSessionId', sessionId);
+            
             // Crear un elemento de enlace oculto
             const link = document.createElement('a');
-            link.href = `https://mpago.la/${selectedPaymentLink}`;
+            link.href = `https://mpago.la/${selectedPaymentLink}?session_id=${sessionId}`;
             link.target = '_blank';
             link.rel = 'noopener noreferrer';
             
@@ -1165,7 +1268,8 @@
             localStorage.setItem('pendingPayment', JSON.stringify({
                 amount: selectedTipAmount,
                 link: selectedPaymentLink,
-                timestamp: Date.now()
+                timestamp: Date.now(),
+                sessionId: sessionId
             }));
             
             // Iniciar verificación de pago
@@ -1216,19 +1320,25 @@
         function verifyPayment() {
             paymentVerified = true;
             
+            // Guardar el estado del pago en localStorage
+            savePaymentStatus(true);
+            
             // Actualizar la interfaz
             const sendButton = document.getElementById('sendButton');
             const whatsappStatus = document.getElementById('whatsappStatus');
-            const paymentVerified = document.getElementById('paymentVerified');
+            const paymentVerifiedDiv = document.getElementById('paymentVerified');
             
-            sendButton.disabled = false;
-            sendButton.classList.add('verified');
+            if (!requestSent) {
+                sendButton.disabled = false;
+                sendButton.classList.add('verified');
+                sendButton.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar solicitud por WhatsApp';
+            }
             
             whatsappStatus.innerHTML = '<i class="fas fa-unlock"></i> ¡Pago verificado! Ahora puedes enviar tu solicitud directamente al DJ';
             whatsappStatus.classList.remove('locked');
             whatsappStatus.classList.add('unlocked');
             
-            paymentVerified.style.display = 'block';
+            paymentVerifiedDiv.style.display = 'block';
             
             // Limpiar el localStorage
             localStorage.removeItem('pendingPayment');
@@ -1240,6 +1350,11 @@
         function sendRequest() {
             if (!paymentVerified) {
                 alert('Debes completar el pago antes de enviar tu solicitud');
+                return;
+            }
+            
+            if (requestSent) {
+                alert('Ya has enviado tu solicitud. Por favor, espera a que el DJ la procese.');
                 return;
             }
             
@@ -1280,6 +1395,16 @@
             
             // Eliminar el enlace del DOM
             document.body.removeChild(link);
+            
+            // Marcar la solicitud como enviada
+            requestSent = true;
+            localStorage.setItem('requestSent', 'true');
+            
+            // Actualizar el botón
+            const sendButton = document.getElementById('sendButton');
+            sendButton.innerHTML = '<i class="fas fa-check"></i> Solicitud enviada';
+            sendButton.disabled = true;
+            sendButton.classList.remove('verified');
             
             // Mostrar mensaje de agradecimiento
             document.getElementById('mainContent').style.display = 'none';
