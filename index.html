@@ -807,6 +807,37 @@
             font-weight: 500;
         }
         
+        .payment-confirmation {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(153, 69, 255, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(153, 69, 255, 0.3);
+        }
+        
+        .payment-confirmation h4 {
+            color: var(--neon-primary);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .payment-confirmation p {
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .confirmation-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .confirmation-buttons button {
+            flex: 1;
+            padding: 10px;
+            font-size: 0.9rem;
+        }
+        
         @media (max-width: 600px) {
             .container {
                 padding: 20px;
@@ -835,6 +866,10 @@
             .qr-code {
                 width: 180px;
                 height: 180px;
+            }
+            
+            .confirmation-buttons {
+                flex-direction: column;
             }
         }
     </style>
@@ -921,6 +956,15 @@
                 <div class="payment-verified" id="paymentVerified">
                     <i class="fas fa-check-circle"></i> <span>Pago verificado correctamente. Ya puedes enviar tu solicitud.</span>
                 </div>
+                
+                <div class="payment-confirmation" id="paymentConfirmation">
+                    <h4>¿Completaste tu pago?</h4>
+                    <p>Para continuar, confirma que realmente has completado el pago en Mercado Pago. Esto es necesario para verificar tu transacción.</p>
+                    <div class="confirmation-buttons">
+                        <button class="btn-primary" onclick="confirmPayment()">Sí, completé el pago</button>
+                        <button class="btn-secondary" onclick="cancelPayment()">No, aún no he pagado</button>
+                    </div>
+                </div>
             </div>
             
             <div class="whatsapp-section">
@@ -946,7 +990,7 @@
                 </div>
                 <div class="step">
                     <div class="step-number">3</div>
-                    <div>Una vez realizado el pago, serás redirigido de vuelta y el botón se activará</div>
+                    <div>Una vez realizado el pago, confirma que lo completaste</div>
                 </div>
                 <div class="step">
                     <div class="step-number">4</div>
@@ -1006,6 +1050,7 @@
         let requestSent = false;
         let paymentSessionId = '';
         let mp = null;
+        let paymentInitiated = false;
         
         // Credenciales de Mercado Pago
         const MERCADO_PAGO_PUBLIC_KEY = 'APP_USR-89dd78c0-25de-4479-aa45-b0873d255cad';
@@ -1165,6 +1210,35 @@
             return date.toLocaleString('es-ES', options);
         }
         
+        // Función para verificar el estado del pago con la API de Mercado Pago
+        async function checkPaymentWithAPI() {
+            try {
+                // Extraer el ID de pago del enlace
+                const paymentId = selectedPaymentLink;
+                
+                // Realizar la solicitud a la API de Mercado Pago
+                const response = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${MERCADO_PAGO_ACCESS_TOKEN}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Error en la solicitud: ${response.status}`);
+                }
+                
+                const paymentData = await response.json();
+                
+                // Verificar si el pago está aprobado
+                return paymentData.status === 'approved';
+            } catch (error) {
+                console.error('Error al verificar el pago:', error);
+                return false;
+            }
+        }
+        
         // Inicializar Mercado Pago
         document.addEventListener('DOMContentLoaded', function() {
             // Inicializar Mercado Pago
@@ -1187,7 +1261,8 @@
                 const savedSessionId = localStorage.getItem('paymentSessionId');
                 
                 if (sessionId && sessionId === savedSessionId) {
-                    verifyPayment();
+                    // Mostrar la confirmación de pago
+                    document.getElementById('paymentConfirmation').style.display = 'block';
                 }
             }
             
@@ -1400,6 +1475,10 @@
             localStorage.setItem('paymentSessionId', sessionId);
             setCookie('paymentSessionId', sessionId, 24);
             
+            // Marcar que se ha iniciado un pago
+            paymentInitiated = true;
+            localStorage.setItem('paymentInitiated', 'true');
+            
             // Crear un elemento de enlace oculto
             const link = document.createElement('a');
             link.href = `https://mpago.la/${selectedPaymentLink}?session_id=${sessionId}`;
@@ -1422,9 +1501,6 @@
                 timestamp: Date.now(),
                 sessionId: sessionId
             }));
-            
-            // Iniciar verificación de pago
-            checkPaymentStatus();
         }
         
         // Función para mostrar/ocultar el código QR
@@ -1437,8 +1513,8 @@
             }
         }
         
-        // Función para verificar el estado del pago
-        function checkPaymentStatus() {
+        // Función para confirmar el pago
+        async function confirmPayment() {
             if (checkingPayment) return;
             
             checkingPayment = true;
@@ -1448,23 +1524,48 @@
             const originalText = sendButton.innerHTML;
             sendButton.innerHTML = 'Verificando pago<span class="loading-spinner"></span>';
             
-            // Verificar el estado del pago usando la API de Mercado Pago
-            setTimeout(() => {
-                // En un entorno real, aquí verificaríamos con la API de Mercado Pago
-                // Por ahora, simulamos que el pago se ha completado después de 5 segundos
+            try {
+                // Verificar el estado del pago usando la API de Mercado Pago
+                const paymentApproved = await checkPaymentWithAPI();
                 
-                // Verificar si hay información de pago pendiente en localStorage
-                const pendingPayment = JSON.parse(localStorage.getItem('pendingPayment') || '{}');
-                
-                if (pendingPayment.link === selectedPaymentLink && pendingPayment.sessionId === paymentSessionId) {
-                    // Simular que el pago se ha completado
+                if (paymentApproved) {
+                    // El pago está aprobado, activar el botón de WhatsApp
                     verifyPayment();
                 } else {
+                    // El pago no está aprobado, mostrar un error
+                    alert('No se ha podido verificar tu pago. Por favor, asegúrate de haber completado el pago correctamente.');
+                    
                     // Restablecer el botón
                     sendButton.innerHTML = originalText;
                     checkingPayment = false;
+                    
+                    // Ocultar la confirmación de pago
+                    document.getElementById('paymentConfirmation').style.display = 'none';
                 }
-            }, 5000);
+            } catch (error) {
+                console.error('Error al verificar el pago:', error);
+                alert('Ha ocurrido un error al verificar tu pago. Por favor, inténtalo de nuevo más tarde.');
+                
+                // Restablecer el botón
+                sendButton.innerHTML = originalText;
+                checkingPayment = false;
+                
+                // Ocultar la confirmación de pago
+                document.getElementById('paymentConfirmation').style.display = 'none';
+            }
+        }
+        
+        // Función para cancelar el pago
+        function cancelPayment() {
+            // Ocultar la confirmación de pago
+            document.getElementById('paymentConfirmation').style.display = 'none';
+            
+            // Restablecer el estado de verificación
+            checkingPayment = false;
+            
+            // Restablecer el texto del botón
+            const sendButton = document.getElementById('sendButton');
+            sendButton.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar solicitud por WhatsApp';
         }
         
         // Función para verificar el pago
@@ -1491,8 +1592,12 @@
             
             paymentVerifiedDiv.style.display = 'block';
             
+            // Ocultar la confirmación de pago
+            document.getElementById('paymentConfirmation').style.display = 'none';
+            
             // Limpiar el localStorage
             localStorage.removeItem('pendingPayment');
+            localStorage.removeItem('paymentInitiated');
             
             checkingPayment = false;
         }
@@ -1579,9 +1684,11 @@
             // Reiniciar el estado de la solicitud
             requestSent = false;
             paymentVerified = false;
+            paymentInitiated = false;
             localStorage.removeItem('requestSent');
             localStorage.removeItem('paymentVerified');
             localStorage.removeItem('paymentTimestamp');
+            localStorage.removeItem('paymentInitiated');
             setCookie('paymentVerified', '', -1);
             
             // Limpiar los campos del formulario
@@ -1638,6 +1745,21 @@
             // Eliminar el enlace del DOM
             document.body.removeChild(link);
         }
+        
+        // Verificar periódicamente si se debe mostrar la confirmación de pago
+        setInterval(() => {
+            if (paymentInitiated && !paymentVerified && !checkingPayment) {
+                const pendingPayment = JSON.parse(localStorage.getItem('pendingPayment') || '{}');
+                
+                if (pendingPayment.sessionId === paymentSessionId) {
+                    // Mostrar la confirmación de pago
+                    document.getElementById('paymentConfirmation').style.display = 'block';
+                    
+                    // Desplazarse a la confirmación de pago
+                    document.getElementById('paymentConfirmation').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            }
+        }, 3000);
     </script>
 </body>
 </html>
