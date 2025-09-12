@@ -14,19 +14,19 @@
         }
         
         :root {
-            --neon-primary: #00d4ff;
-            --neon-secondary: #0066ff;
-            --neon-accent: #00ffcc;
-            --neon-purple: #9945ff;
-            --bg-dark: #050510;
-            --card-bg: rgba(10, 10, 25, 0.9);
+            --neon-primary: #9945ff;
+            --neon-secondary: #7b2ff7;
+            --neon-accent: #d946ef;
+            --neon-purple: #c084fc;
+            --bg-dark: #0a0a12;
+            --card-bg: rgba(15, 15, 25, 0.9);
             --text-primary: #ffffff;
             --text-secondary: #a0a8b8;
         }
         
         body {
-            background: linear-gradient(135deg, rgba(5, 5, 16, 0.9), rgba(10, 10, 30, 0.9)), 
-                        url('https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background: linear-gradient(135deg, rgba(10, 10, 18, 0.9), rgba(20, 20, 35, 0.9)), 
+                        url('https://images.unsplash.com/photo-1516420386105-2c457373e59c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
             background-size: cover;
             background-position: center;
             color: var(--text-primary);
@@ -45,8 +45,8 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 20% 20%, rgba(0, 212, 255, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(0, 102, 255, 0.03) 0%, transparent 50%);
+                radial-gradient(circle at 20% 20%, rgba(153, 69, 255, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(123, 47, 247, 0.03) 0%, transparent 50%);
             z-index: -1;
         }
         
@@ -57,9 +57,9 @@
             padding: 30px;
             border-radius: 20px;
             box-shadow: 
-                0 0 20px rgba(0, 212, 255, 0.15),
+                0 0 20px rgba(153, 69, 255, 0.15),
                 inset 0 0 15px rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(153, 69, 255, 0.1);
             position: relative;
             overflow: hidden;
             backdrop-filter: blur(10px);
@@ -103,13 +103,13 @@
         }
         
         @keyframes infoPulse {
-            0% { color: var(--neon-primary); text-shadow: 0 0 5px rgba(0, 212, 255, 0.5); }
-            100% { color: var(--neon-accent); text-shadow: 0 0 8px rgba(0, 255, 204, 0.5); }
+            0% { color: var(--neon-primary); text-shadow: 0 0 5px rgba(153, 69, 255, 0.5); }
+            100% { color: var(--neon-accent); text-shadow: 0 0 8px rgba(217, 70, 239, 0.5); }
         }
         
         .info-link:hover {
             color: var(--neon-purple);
-            text-shadow: 0 0 10px rgba(153, 69, 255, 0.7);
+            text-shadow: 0 0 10px rgba(192, 132, 252, 0.7);
             transform: scale(1.05);
         }
         
@@ -127,13 +127,13 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--text-primary);
-            text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+            text-shadow: 0 0 10px rgba(153, 69, 255, 0.3);
         }
         
         .logo {
             font-size: 3.5rem;
             margin-bottom: 15px;
-            filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.3));
+            filter: drop-shadow(0 0 10px rgba(153, 69, 255, 0.3));
         }
         
         .tagline {
@@ -166,6 +166,24 @@
             font-style: italic;
         }
         
+        .youtube-hint {
+            display: inline-block;
+            background: rgba(255, 0, 0, 0.1);
+            color: #ff4757;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 8px;
+            border: 1px solid rgba(255, 0, 0, 0.2);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+        }
+        
         input, select {
             width: 100%;
             padding: 15px;
@@ -174,7 +192,7 @@
             background: rgba(255, 255, 255, 0.05);
             color: var(--text-primary);
             font-size: 1.1rem;
-            border: 1px solid rgba(0, 212, 255, 0.2);
+            border: 1px solid rgba(153, 69, 255, 0.2);
             transition: all 0.3s;
             font-family: 'Rajdhani', sans-serif;
             font-weight: 500;
@@ -183,7 +201,7 @@
         input:focus, select:focus {
             outline: none;
             border-color: var(--neon-primary);
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+            box-shadow: 0 0 15px rgba(153, 69, 255, 0.2);
             background: rgba(255, 255, 255, 0.08);
         }
         
@@ -198,8 +216,8 @@
             width: 100%;
             max-height: 200px;
             overflow-y: auto;
-            background: rgba(10, 10, 25, 0.95);
-            border: 1px solid rgba(0, 212, 255, 0.3);
+            background: rgba(15, 15, 25, 0.95);
+            border: 1px solid rgba(153, 69, 255, 0.3);
             border-radius: 10px;
             z-index: 100;
             display: none;
@@ -218,7 +236,7 @@
         }
         
         .suggestion-item:hover {
-            background: rgba(0, 212, 255, 0.1);
+            background: rgba(153, 69, 255, 0.1);
         }
         
         .suggestion-item .artist {
@@ -230,9 +248,9 @@
             display: none;
             margin-top: 15px;
             padding: 15px;
-            background: rgba(10, 10, 25, 0.8);
+            background: rgba(15, 15, 25, 0.8);
             border-radius: 10px;
-            border: 1px solid rgba(0, 212, 255, 0.2);
+            border: 1px solid rgba(153, 69, 255, 0.2);
         }
         
         .video-previews.show {
@@ -265,7 +283,7 @@
         .video-item:hover {
             transform: translateY(-5px);
             border-color: var(--neon-primary);
-            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+            box-shadow: 0 5px 15px rgba(153, 69, 255, 0.3);
         }
         
         .video-item.selected {
@@ -319,13 +337,13 @@
         
         .btn-primary {
             background: linear-gradient(45deg, var(--neon-primary), var(--neon-secondary));
-            color: black;
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+            color: white;
+            box-shadow: 0 0 20px rgba(153, 69, 255, 0.3);
         }
         
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
+            box-shadow: 0 5px 20px rgba(153, 69, 255, 0.4);
         }
         
         .btn-primary:disabled {
@@ -340,19 +358,9 @@
         }
         
         @keyframes heartbeat {
-            0% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
-            50% { box-shadow: 0 0 30px rgba(0, 255, 204, 0.6); }
-            100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
-        }
-        
-        .btn-whatsapp {
-            background: linear-gradient(45deg, #128C7E, #25D366);
-            box-shadow: 0 0 20px rgba(37, 211, 102, 0.3);
-        }
-        
-        .btn-whatsapp:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4);
+            0% { box-shadow: 0 0 20px rgba(153, 69, 255, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(217, 70, 239, 0.6); }
+            100% { box-shadow: 0 0 20px rgba(153, 69, 255, 0.3); }
         }
         
         .btn-instagram {
@@ -371,9 +379,10 @@
             padding: 25px;
             background: rgba(255, 255, 255, 0.02);
             border-radius: 15px;
-            border: 1px solid rgba(0, 212, 255, 0.1);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.08);
+            border: 1px solid rgba(153, 69, 255, 0.1);
+            box-shadow: 0 0 20px rgba(153, 69, 255, 0.08);
             backdrop-filter: blur(10px);
+            scroll-margin-top: 20px;
         }
         
         .payment-section h2 {
@@ -429,8 +438,8 @@
         
         .tip-option.selected {
             border-color: var(--neon-primary);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
-            color: black;
+            box-shadow: 0 0 20px rgba(153, 69, 255, 0.3);
+            color: white;
         }
         
         .tip-option.selected::before {
@@ -478,7 +487,7 @@
         .payment-method-button {
             padding: 10px 20px;
             background: var(--neon-primary);
-            color: black;
+            color: white;
             border: none;
             border-radius: 8px;
             font-weight: 600;
@@ -502,7 +511,7 @@
             display: none;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 25px rgba(0, 212, 255, 0.3);
+            box-shadow: 0 0 25px rgba(153, 69, 255, 0.3);
             border: 1px solid var(--neon-primary);
             position: relative;
             overflow: hidden;
@@ -515,7 +524,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(0, 212, 255, 0.3), transparent);
+            background: linear-gradient(45deg, transparent, rgba(153, 69, 255, 0.3), transparent);
             transform: rotate(45deg);
             animation: qrScan 3s infinite linear;
         }
@@ -580,7 +589,7 @@
         
         .step-number {
             background: linear-gradient(45deg, var(--neon-primary), var(--neon-secondary));
-            color: black;
+            color: white;
             width: 35px;
             height: 35px;
             border-radius: 50%;
@@ -590,7 +599,7 @@
             font-weight: bold;
             margin-right: 15px;
             flex-shrink: 0;
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+            box-shadow: 0 0 15px rgba(153, 69, 255, 0.3);
             font-family: 'Orbitron', sans-serif;
         }
         
@@ -638,12 +647,6 @@
             margin-bottom: 15px;
         }
         
-        .whatsapp-section .checking {
-            color: var(--neon-primary);
-            font-style: italic;
-            margin-bottom: 15px;
-        }
-        
         .contact-section {
             margin-top: 35px;
             padding: 25px;
@@ -676,12 +679,12 @@
         .thank-you-message {
             text-align: center;
             padding: 40px;
-            background: rgba(0, 212, 255, 0.03);
+            background: rgba(153, 69, 255, 0.03);
             border-radius: 20px;
             margin: 25px 0;
             animation: fadeIn 1s;
             border: 1px solid var(--neon-primary);
-            box-shadow: 0 0 25px rgba(0, 212, 255, 0.15);
+            box-shadow: 0 0 25px rgba(153, 69, 255, 0.15);
             backdrop-filter: blur(10px);
         }
         
@@ -695,7 +698,7 @@
             font-size: 2.2rem;
             margin-bottom: 20px;
             color: var(--neon-primary);
-            text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+            text-shadow: 0 0 10px rgba(153, 69, 255, 0.3);
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -708,18 +711,18 @@
             background: rgba(255, 255, 255, 0.03);
             border-radius: 15px;
             border: 1px solid var(--neon-primary);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
+            box-shadow: 0 0 20px rgba(153, 69, 255, 0.1);
         }
         
         .payment-verified {
             display: none;
             text-align: center;
             padding: 20px;
-            background: rgba(0, 212, 255, 0.05);
+            background: rgba(153, 69, 255, 0.05);
             border-radius: 15px;
             margin: 20px 0;
             border: 1px solid var(--neon-primary);
-            box-shadow: 0 0 25px rgba(0, 212, 255, 0.15);
+            box-shadow: 0 0 25px rgba(153, 69, 255, 0.15);
             backdrop-filter: blur(10px);
         }
         
@@ -793,7 +796,10 @@
                     <input type="text" id="song" placeholder="Ej: Despacito - Luis Fonsi" required>
                     <div class="suggestions" id="songSuggestions"></div>
                 </div>
-                <div class="input-hint">Puedes escribir el nombre o pegar enlace de YouTube si prefieres una versión específica</div>
+                <div class="input-hint">Puedes escribir el nombre o pegar enlace de YouTube</div>
+                <div class="youtube-hint" id="youtubeHint">
+                    <i class="fab fa-youtube"></i> ¿No encuentras tu canción? Pega el enlace de YouTube aquí
+                </div>
                 <div class="video-previews" id="videoPreviews">
                     <h4>Selecciona una versión:</h4>
                     <div class="video-list" id="videoList"></div>
@@ -810,7 +816,7 @@
                 <input type="text" id="dedication" placeholder="¿A quién se la dedicas?">
             </div>
             
-            <div class="payment-section">
+            <div class="payment-section" id="paymentSection">
                 <h2>Propina para el DJ</h2>
                 <p>Selecciona el monto de propina:</p>
                 
@@ -860,7 +866,7 @@
             </div>
             
             <div class="whatsapp-section">
-                <h3><i class="fab fa-whatsapp"></i> Envía tu solicitud al DJ</h3>
+                <h3><i class="fab fa-whatsapp"></i> Una vez que pagues se activará el botón para enviar al DJ</h3>
                 <div id="whatsappStatus" class="locked">
                     <i class="fas fa-lock"></i> Completa el pago para desbloquear el envío de tu solicitud
                 </div>
@@ -931,16 +937,14 @@
         let selectedPaymentLink = "11ovC58";
         let paymentVerified = false;
         let checkingPayment = false;
-        let paymentId = null; // ID único para cada pago
-        let paymentData = {}; // Datos del pago a verificar
         
         // Array de imágenes de fondo para rotar
         const backgroundImages = [
-            'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-            'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-            'https://images.unsplash.com/photo-1533174072545-fdf318352cfd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-            'https://images.unsplash.com/photo-1607799279861-4dd4213f838b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-            'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+            'https://images.unsplash.com/photo-1516420386105-2c457373e59c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+            'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+            'https://images.unsplash.com/photo-1614149162895-78d4b6a7a381?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+            'https://images.unsplash.com/photo-1569954534275-8a1a2595786c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+            'https://images.unsplash.com/photo-1558021160-28d6cd957e3a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
         ];
         
         let currentImageIndex = 0;
@@ -969,273 +973,24 @@
             { title: "Que Tire Pa Lante", artist: "Daddy Yankee & Snow", videoId: "41YubZp_nbg", duration: "3:20" }
         ];
         
-        // Función para generar un ID único para cada pago
-        function generatePaymentId() {
-            return 'pay_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-        }
-        
-        // Función para guardar datos del pago en el almacenamiento local
-        function savePaymentData() {
-            const song = document.getElementById('song').value;
-            const name = document.getElementById('name').value;
-            const dedication = document.getElementById('dedication').value;
-            
-            paymentData = {
-                id: paymentId,
-                song: song,
-                name: name,
-                dedication: dedication,
-                amount: selectedTipAmount,
-                timestamp: new Date().toISOString(),
-                verified: false
-            };
-            
-            // Guardar en localStorage
-            localStorage.setItem('paymentData_' + paymentId, JSON.stringify(paymentData));
-            
-            // También guardar el ID del pago actual para poder recuperarlo si el usuario cierra la página
-            localStorage.setItem('currentPaymentId', paymentId);
-        }
-        
         // Función para cambiar la imagen de fondo
         function changeBackground() {
             currentImageIndex = (currentImageIndex + 1) % backgroundImages.length;
-            document.body.style.backgroundImage = `linear-gradient(135deg, rgba(5, 5, 16, 0.9), rgba(10, 10, 30, 0.9)), url('${backgroundImages[currentImageIndex]}')`;
-        }
-        
-        // Función para verificar si hay un pago pendiente al cargar la página
-        function checkPendingPayment() {
-            const pendingPaymentId = localStorage.getItem('currentPaymentId');
-            if (pendingPaymentId) {
-                const pendingPayment = JSON.parse(localStorage.getItem('paymentData_' + pendingPaymentId));
-                if (pendingPayment && !pendingPayment.verified) {
-                    // Hay un pago pendiente de verificación
-                    paymentId = pendingPaymentId;
-                    paymentData = pendingPayment;
-                    
-                    // Restaurar los datos del formulario
-                    document.getElementById('song').value = pendingPayment.song;
-                    document.getElementById('name').value = pendingPayment.name;
-                    document.getElementById('dedication').value = pendingPayment.dedication || '';
-                    
-                    // Seleccionar el monto de propina correcto
-                    document.querySelectorAll('.tip-option').forEach(option => {
-                        option.classList.remove('selected');
-                        if (parseInt(option.dataset.amount) === pendingPayment.amount) {
-                            option.classList.add('selected');
-                        }
-                    });
-                    
-                    selectedTipAmount = pendingPayment.amount;
-                    
-                    // Iniciar verificación periódica
-                    startPaymentVerification();
-                    
-                    // Mostrar mensaje al usuario
-                    document.getElementById('whatsappStatus').innerHTML = '<div class="checking"><i class="fas fa-clock"></i> Detectamos un pago en proceso. Verificando... <span class="loading-spinner"></span></div>';
-                }
-            }
-        }
-        
-        // Función para iniciar la verificación periódica del pago
-        function startPaymentVerification() {
-            if (checkingPayment) return;
-            
-            checkingPayment = true;
-            
-            // Simular un tiempo de verificación más largo (10 segundos)
-            const checkInterval = setInterval(() => {
-                // Simulación de verificación de pago
-                // En una implementación real, aquí harías una llamada a la API de Mercado Pago
-                
-                // Para demostración, simulamos que el pago se verifica después de 10 segundos
-                const elapsed = Date.now() - new Date(paymentData.timestamp).getTime();
-                
-                if (elapsed > 10000) { // 10 segundos
-                    clearInterval(checkInterval);
-                    verifyPayment();
-                }
-            }, 2000); // Verificar cada 2 segundos
-        }
-        
-        // Función para verificar el pago
-        function verifyPayment() {
-            // En una implementación real, aquí verificarías con la API de Mercado Pago
-            // Por ahora, simulamos una verificación exitosa
-            
-            paymentVerified = true;
-            paymentData.verified = true;
-            
-            // Actualizar el almacenamiento local
-            localStorage.setItem('paymentData_' + paymentId, JSON.stringify(paymentData));
-            
-            // Actualizar la UI
-            document.getElementById('paymentVerified').style.display = 'block';
-            document.getElementById('sendButton').disabled = false;
-            document.getElementById('sendButton').classList.add('verified');
-            document.getElementById('whatsappStatus').innerHTML = '<div class="unlocked"><i class="fas fa-unlock"></i> Pago verificado. Ya puedes enviar tu solicitud.</div>';
-            
-            checkingPayment = false;
-        }
-        
-        // Función para abrir el enlace de pago
-        function openPaymentLink() {
-            // Generar un ID único para este pago
-            paymentId = generatePaymentId();
-            
-            // Guardar los datos del pago
-            savePaymentData();
-            
-            // Construir la URL de pago con el ID como parámetro
-            const paymentUrl = `https://mpago.la/${selectedPaymentLink}?payment_id=${paymentId}`;
-            
-            // Abrir la URL en una nueva pestaña
-            window.open(paymentUrl, '_blank');
-            
-            // Iniciar el proceso de verificación
-            startPaymentVerification();
-            
-            // Actualizar el mensaje de estado
-            document.getElementById('whatsappStatus').innerHTML = '<div class="checking"><i class="fas fa-clock"></i> Esperando verificación de pago... <span class="loading-spinner"></span></div>';
-        }
-        
-        // Función para mostrar/ocultar el código QR
-        function toggleQR() {
-            const qrCode = document.getElementById('qrCode');
-            qrCode.style.display = qrCode.style.display === 'flex' ? 'none' : 'flex';
-            
-            // Si estamos mostrando el QR, también generamos un ID de pago
-            if (qrCode.style.display === 'flex' && !paymentId) {
-                paymentId = generatePaymentId();
-                savePaymentData();
-                
-                // Actualizar la imagen del QR para incluir el ID de pago
-                document.getElementById('paymentQR').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://mpago.la/${selectedPaymentLink}?payment_id=${paymentId}&color=1a2a6c&bgcolor=ffffff`;
-                
-                // Iniciar el proceso de verificación
-                startPaymentVerification();
-                
-                // Actualizar el mensaje de estado
-                document.getElementById('whatsappStatus').innerHTML = '<div class="checking"><i class="fas fa-clock"></i> Esperando verificación de pago... <span class="loading-spinner"></span></div>';
-            }
-        }
-        
-        // Función para enviar la solicitud por WhatsApp
-        function sendRequest() {
-            if (!paymentVerified) {
-                alert('Por favor, realiza el pago antes de enviar tu solicitud.');
-                return;
-            }
-            
-            const song = document.getElementById('song').value;
-            const name = document.getElementById('name').value;
-            const dedication = document.getElementById('dedication').value;
-            
-            let message = `¡Hola DJ David Agüero! Quisiera pedir una canción:\n\n`;
-            message += `🎵 Canción: ${song}\n`;
-            message += `👤 Nombre: ${name}\n`;
-            message += `💰 Propina: $${selectedTipAmount}\n`;
-            
-            if (dedication) {
-                message += `💝 Dedicado a: ${dedication}\n`;
-            }
-            
-            message += `\nID de pago: ${paymentId}`;
-            
-            // Codificar el mensaje para WhatsApp
-            const encodedMessage = encodeURIComponent(message);
-            
-            // Usar el número de WhatsApp proporcionado: 3834619831
-            const whatsappUrl = `https://wa.me/543834619831?text=${encodedMessage}`;
-            
-            // Abrir WhatsApp
-            window.open(whatsappUrl, '_blank');
-            
-            // Mostrar mensaje de agradecimiento
-            document.getElementById('mainContent').style.display = 'none';
-            document.getElementById('thankYouContent').style.display = 'block';
-            document.getElementById('finalSongDisplay').textContent = song;
-            
-            // Limpiar el almacenamiento local
-            localStorage.removeItem('currentPaymentId');
-        }
-        
-        // Función para contactar por Instagram para contrataciones
-        function contactForBooking() {
-            window.open('https://www.instagram.com/david_aguero_dj', '_blank');
-        }
-        
-        // Función para mostrar vistas previas de videos
-        function showVideoPreviews(songTitle) {
-            const videoPreviews = document.getElementById('videoPreviews');
-            const videoList = document.getElementById('videoList');
-            
-            // Filtrar canciones que coincidan con el título
-            const matchingSongs = popularSongs.filter(song => 
-                song.title.toLowerCase().includes(songTitle.toLowerCase())
-            );
-            
-            if (matchingSongs.length > 0) {
-                videoList.innerHTML = '';
-                
-                matchingSongs.forEach(song => {
-                    const videoItem = document.createElement('div');
-                    videoItem.className = 'video-item';
-                    videoItem.innerHTML = `
-                        <div class="video-thumbnail" style="background-image: url('https://img.youtube.com/vi/${song.videoId}/default.jpg')">
-                            <div class="video-duration">${song.duration}</div>
-                        </div>
-                        <div class="video-title">${song.title}</div>
-                    `;
-                    
-                    videoItem.addEventListener('click', function() {
-                        // Remover la clase seleccionada de todos los elementos
-                        document.querySelectorAll('.video-item').forEach(item => {
-                            item.classList.remove('selected');
-                        });
-                        
-                        // Añadir la clase seleccionada al elemento actual
-                        this.classList.add('selected');
-                        
-                        // Actualizar el campo de canción
-                        document.getElementById('song').value = `${song.title} - ${song.artist}`;
-                        
-                        // Ocultar las sugerencias
-                        document.getElementById('songSuggestions').style.display = 'none';
-                    });
-                    
-                    videoList.appendChild(videoItem);
-                });
-                
-                videoPreviews.classList.add('show');
-            } else {
-                videoPreviews.classList.remove('show');
-            }
+            document.body.style.backgroundImage = `linear-gradient(135deg, rgba(10, 10, 18, 0.9), rgba(20, 20, 35, 0.9)), url('${backgroundImages[currentImageIndex]}')`;
         }
         
         // Inicializar
         document.addEventListener('DOMContentLoaded', function() {
             // Establecer la primera imagen de fondo
-            document.body.style.backgroundImage = `linear-gradient(135deg, rgba(5, 5, 16, 0.9), rgba(10, 10, 30, 0.9)), url('${backgroundImages[0]}')`;
+            document.body.style.backgroundImage = `linear-gradient(135deg, rgba(10, 10, 18, 0.9), rgba(20, 20, 35, 0.9)), url('${backgroundImages[0]}')`;
             
             // Cambiar la imagen de fondo cada 3.5 segundos
             setInterval(changeBackground, 3500);
             
-            // Verificar si hay un pago pendiente
-            checkPendingPayment();
-            
             // Verificar si viene de un pago exitoso
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('payment') === 'success') {
-                const returnedPaymentId = urlParams.get('payment_id');
-                if (returnedPaymentId) {
-                    paymentId = returnedPaymentId;
-                    const savedPaymentData = localStorage.getItem('paymentData_' + paymentId);
-                    if (savedPaymentData) {
-                        paymentData = JSON.parse(savedPaymentData);
-                        verifyPayment();
-                    }
-                }
+                verifyPayment();
             }
             
             // Inicializar selección de propina
@@ -1257,23 +1012,23 @@
             // Configurar selección de propina
             document.querySelectorAll('.tip-option').forEach(option => {
                 option.addEventListener('click', function() {
-                    // Remover la clase seleccionada de todas las opciones
+                    // Remover la clase selected de todas las opciones
                     document.querySelectorAll('.tip-option').forEach(opt => {
                         opt.classList.remove('selected');
                     });
                     
-                    // Añadir la clase seleccionada a la opción actual
+                    // Agregar la clase selected a la opción seleccionada
                     this.classList.add('selected');
                     
                     // Actualizar las variables globales
                     selectedTipAmount = parseInt(this.dataset.amount);
                     selectedPaymentLink = this.dataset.link;
                     
-                    // Actualizar el código QR si está visible
-                    const qrCode = document.getElementById('qrCode');
-                    if (qrCode.style.display === 'flex') {
-                        document.getElementById('paymentQR').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://mpago.la/${selectedPaymentLink}?payment_id=${paymentId || ''}&color=1a2a6c&bgcolor=ffffff`;
-                    }
+                    // Actualizar el código QR
+                    updateQRCode();
+                    
+                    // Desplazarse suavemente a la sección de pago
+                    document.getElementById('paymentSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 });
             });
             
@@ -1281,9 +1036,23 @@
             const songInput = document.getElementById('song');
             const suggestionsContainer = document.getElementById('songSuggestions');
             const videoPreviews = document.getElementById('videoPreviews');
+            const videoList = document.getElementById('videoList');
+            const youtubeHint = document.getElementById('youtubeHint');
             
-            // Ocultar las sugerencias cuando el usuario empieza a escribir
+            // Mostrar la pista de YouTube después de 2 segundos de inactividad
+            let inactivityTimer;
+            function showYouTubeHint() {
+                clearTimeout(inactivityTimer);
+                inactivityTimer = setTimeout(() => {
+                    youtubeHint.style.display = 'inline-block';
+                }, 2000);
+            }
+            
+            // Ocultar la pista cuando el usuario empieza a escribir
             songInput.addEventListener('input', function() {
+                clearTimeout(inactivityTimer);
+                youtubeHint.style.display = 'none';
+                
                 const value = this.value.toLowerCase();
                 if (value.length < 2) {
                     suggestionsContainer.style.display = 'none';
@@ -1319,7 +1088,228 @@
                     videoPreviews.classList.remove('show');
                 }
             });
+            
+            // Si el usuario no escribe nada por 5 segundos, mostrar la pista de YouTube
+            songInput.addEventListener('focus', function() {
+                showYouTubeHint();
+            });
+            
+            // Función para mostrar vistas previas de videos
+            function showVideoPreviews(songTitle) {
+                // Filtrar canciones que coincidan con el título
+                const matchingSongs = popularSongs.filter(song => 
+                    song.title.toLowerCase() === songTitle.toLowerCase()
+                );
+                
+                if (matchingSongs.length > 0) {
+                    videoList.innerHTML = '';
+                    
+                    // Mostrar hasta 3 versiones de la canción
+                    const maxVideos = Math.min(matchingSongs.length, 3);
+                    for (let i = 0; i < maxVideos; i++) {
+                        const song = matchingSongs[i];
+                        const videoItem = document.createElement('div');
+                        videoItem.className = 'video-item';
+                        videoItem.innerHTML = `
+                            <div class="video-thumbnail" style="background-image: url('https://img.youtube.com/vi/${song.videoId}/default.jpg')">
+                                <div class="video-duration">${song.duration}</div>
+                            </div>
+                            <div class="video-title">${song.title} - ${song.artist}</div>
+                        `;
+                        
+                        videoItem.addEventListener('click', function() {
+                            // Remover la clase selected de todos los videos
+                            document.querySelectorAll('.video-item').forEach(item => {
+                                item.classList.remove('selected');
+                            });
+                            
+                            // Agregar la clase selected al video seleccionado
+                            this.classList.add('selected');
+                            
+                            // Actualizar el valor del input con la canción seleccionada
+                            songInput.value = `${song.title} - ${song.artist}`;
+                        });
+                        
+                        videoList.appendChild(videoItem);
+                    }
+                    
+                    videoPreviews.classList.add('show');
+                }
+            }
+            
+            // Función para actualizar el código QR
+            function updateQRCode() {
+                const qrImg = document.getElementById('paymentQR');
+                qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://mpago.la/${selectedPaymentLink}&color=1a2a6c&bgcolor=ffffff`;
+            }
         });
+        
+        // Función para abrir el enlace de pago
+        function openPaymentLink() {
+            // Crear un elemento de enlace oculto
+            const link = document.createElement('a');
+            link.href = `https://mpago.la/${selectedPaymentLink}`;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            
+            // Agregar el enlace al DOM
+            document.body.appendChild(link);
+            
+            // Simular un clic en el enlace
+            link.click();
+            
+            // Eliminar el enlace del DOM
+            document.body.removeChild(link);
+            
+            // Guardar información del pago en localStorage
+            localStorage.setItem('pendingPayment', JSON.stringify({
+                amount: selectedTipAmount,
+                link: selectedPaymentLink,
+                timestamp: Date.now()
+            }));
+            
+            // Iniciar verificación de pago
+            checkPaymentStatus();
+        }
+        
+        // Función para mostrar/ocultar el código QR
+        function toggleQR() {
+            const qrCode = document.getElementById('qrCode');
+            if (qrCode.style.display === 'flex') {
+                qrCode.style.display = 'none';
+            } else {
+                qrCode.style.display = 'flex';
+            }
+        }
+        
+        // Función para verificar el estado del pago
+        function checkPaymentStatus() {
+            if (checkingPayment) return;
+            
+            checkingPayment = true;
+            
+            // Mostrar indicador de carga
+            const sendButton = document.getElementById('sendButton');
+            const originalText = sendButton.innerHTML;
+            sendButton.innerHTML = 'Verificando pago<span class="loading-spinner"></span>';
+            
+            // Simular verificación de pago (en un entorno real, esto sería una llamada a la API)
+            setTimeout(() => {
+                // En un entorno real, aquí verificaríamos con la API de Mercado Pago
+                // Por ahora, simulamos que el pago se ha completado después de 5 segundos
+                
+                // Verificar si hay información de pago pendiente en localStorage
+                const pendingPayment = JSON.parse(localStorage.getItem('pendingPayment') || '{}');
+                
+                if (pendingPayment.link === selectedPaymentLink) {
+                    // Simular que el pago se ha completado
+                    verifyPayment();
+                } else {
+                    // Restablecer el botón
+                    sendButton.innerHTML = originalText;
+                    checkingPayment = false;
+                }
+            }, 5000);
+        }
+        
+        // Función para verificar el pago
+        function verifyPayment() {
+            paymentVerified = true;
+            
+            // Actualizar la interfaz
+            const sendButton = document.getElementById('sendButton');
+            const whatsappStatus = document.getElementById('whatsappStatus');
+            const paymentVerified = document.getElementById('paymentVerified');
+            
+            sendButton.disabled = false;
+            sendButton.classList.add('verified');
+            
+            whatsappStatus.innerHTML = '<i class="fas fa-unlock"></i> ¡Pago verificado! Ahora puedes enviar tu solicitud directamente al DJ';
+            whatsappStatus.classList.remove('locked');
+            whatsappStatus.classList.add('unlocked');
+            
+            paymentVerified.style.display = 'block';
+            
+            // Limpiar el localStorage
+            localStorage.removeItem('pendingPayment');
+            
+            checkingPayment = false;
+        }
+        
+        // Función para enviar la solicitud por WhatsApp
+        function sendRequest() {
+            if (!paymentVerified) {
+                alert('Debes completar el pago antes de enviar tu solicitud');
+                return;
+            }
+            
+            const song = document.getElementById('song').value;
+            const name = document.getElementById('name').value;
+            const dedication = document.getElementById('dedication').value;
+            
+            if (!song || !name) {
+                alert('Por favor, completa todos los campos obligatorios');
+                return;
+            }
+            
+            // Crear mensaje para WhatsApp
+            let message = `Hola DJ David Agüero, quiero solicitar una canción:\n\n`;
+            message += `Canción: ${song}\n`;
+            message += `Nombre: ${name}\n`;
+            
+            if (dedication) {
+                message += `Dedicación: ${dedication}\n`;
+            }
+            
+            message += `\nPropina: $${selectedTipAmount}`;
+            
+            // Crear enlace de WhatsApp
+            const whatsappLink = `https://wa.me/543834619831?text=${encodeURIComponent(message)}`;
+            
+            // Crear un elemento de enlace oculto
+            const link = document.createElement('a');
+            link.href = whatsappLink;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            
+            // Agregar el enlace al DOM
+            document.body.appendChild(link);
+            
+            // Simular un clic en el enlace
+            link.click();
+            
+            // Eliminar el enlace del DOM
+            document.body.removeChild(link);
+            
+            // Mostrar mensaje de agradecimiento
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('thankYouContent').style.display = 'block';
+            document.getElementById('finalSongDisplay').textContent = song;
+        }
+        
+        // Función para contactar para contrataciones
+        function contactForBooking() {
+            // Crear mensaje para Instagram
+            const message = `Hola DJ David Agüero, estoy interesado en contratar tus servicios para un evento. ¿Podrían darme más información?`;
+            
+            // Crear enlace de Instagram
+            const instagramLink = `https://www.instagram.com/david_aguero_dj?igsh=MTd2MnF5am4ybHpwMg==`;
+            
+            // Crear un elemento de enlace oculto
+            const link = document.createElement('a');
+            link.href = instagramLink;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            
+            // Agregar el enlace al DOM
+            document.body.appendChild(link);
+            
+            // Simular un clic en el enlace
+            link.click();
+            
+            // Eliminar el enlace del DOM
+            document.body.removeChild(link);
+        }
     </script>
 </body>
 </html>
