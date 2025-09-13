@@ -850,6 +850,16 @@
             font-size: 1rem;
         }
         
+        .debug-info {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(255, 0, 0, 0.1);
+            border-radius: 5px;
+            font-size: 0.8rem;
+            color: #ff9999;
+        }
+        
         @media (max-width: 600px) {
             .container {
                 padding: 20px;
@@ -976,6 +986,10 @@
                         <button class="btn-primary" onclick="confirmPayment()">Sí, completé el pago</button>
                         <button class="btn-secondary" onclick="cancelPayment()">No, aún no he pagado</button>
                     </div>
+                </div>
+                
+                <div class="debug-info" id="debugInfo">
+                    Información de depuración: <span id="debugText"></span>
                 </div>
             </div>
             
@@ -1228,6 +1242,10 @@
                 // Extraer el ID de pago del enlace
                 const paymentId = selectedPaymentLink;
                 
+                // Mostrar información de depuración
+                document.getElementById('debugInfo').style.display = 'block';
+                document.getElementById('debugText').textContent = `Verificando pago con ID: ${paymentId}`;
+                
                 // Realizar la solicitud a la API de Mercado Pago
                 const response = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
                     method: 'GET',
@@ -1243,10 +1261,14 @@
                 
                 const paymentData = await response.json();
                 
+                // Mostrar más información de depuración
+                document.getElementById('debugText').textContent = `Estado del pago: ${paymentData.status}`;
+                
                 // Verificar si el pago está aprobado
                 return paymentData.status === 'approved';
             } catch (error) {
                 console.error('Error al verificar el pago:', error);
+                document.getElementById('debugText').textContent = `Error: ${error.message}`;
                 return false;
             }
         }
@@ -1582,6 +1604,8 @@
         
         // Función para verificar el pago
         function verifyPayment() {
+            console.log('Función verifyPayment llamada');
+            
             paymentVerified = true;
             
             // Guardar el estado del pago en localStorage y cookies
@@ -1592,16 +1616,17 @@
             const whatsappStatus = document.getElementById('whatsappStatus');
             const paymentVerifiedDiv = document.getElementById('paymentVerified');
             
-            if (!requestSent) {
-                sendButton.disabled = false;
-                sendButton.classList.add('verified');
-                sendButton.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar solicitud por WhatsApp';
-            }
+            // Habilitar el botón de WhatsApp
+            sendButton.disabled = false;
+            sendButton.classList.add('verified');
+            sendButton.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar solicitud por WhatsApp';
             
+            // Actualizar el estado de WhatsApp
             whatsappStatus.innerHTML = '<i class="fas fa-unlock"></i> ¡Pago verificado! Ahora puedes enviar tu solicitud directamente al DJ';
             whatsappStatus.classList.remove('locked');
             whatsappStatus.classList.add('unlocked');
             
+            // Mostrar el mensaje de verificación
             paymentVerifiedDiv.style.display = 'block';
             
             // Ocultar la confirmación de pago
@@ -1612,10 +1637,14 @@
             localStorage.removeItem('paymentInitiated');
             
             checkingPayment = false;
+            
+            console.log('Botón de WhatsApp habilitado');
         }
         
         // Función para enviar la solicitud por WhatsApp
         function sendRequest() {
+            console.log('Función sendRequest llamada. paymentVerified:', paymentVerified);
+            
             if (!paymentVerified) {
                 alert('Debes completar el pago antes de enviar tu solicitud');
                 return;
