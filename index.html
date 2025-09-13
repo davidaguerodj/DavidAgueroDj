@@ -1755,6 +1755,37 @@
             document.body.style.backgroundImage = `linear-gradient(135deg, rgba(10, 10, 18, 0.9), rgba(20, 20, 35, 0.9)), url('${backgroundImages[currentImageIndex]}')`;
         }
         
+        // Función para verificar si hay un retorno de Mercado Pago
+        function checkPaymentReturn() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const paymentId = urlParams.get('payment_id');
+            const status = urlParams.get('status');
+            
+            if (paymentId && status === 'approved') {
+                // Si hay un pago aprobado, registrar y verificar
+                fetch('/registrar-pago', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        sessionId: paymentSessionId,
+                        paymentId: paymentId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.registrado) {
+                        // Verificar el estado del pago
+                        checkPaymentStatus();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al registrar el pago:', error);
+                });
+            }
+        }
+        
         // Inicializar la página
         document.addEventListener('DOMContentLoaded', function() {
             // Inicializar Mercado Pago
@@ -1765,6 +1796,9 @@
             
             // Establecer una cookie con el ID de sesión
             setCookie('paymentSessionId', paymentSessionId, 24);
+            
+            // Verificar si hay un retorno de Mercado Pago
+            checkPaymentReturn();
             
             // Configurar eventos de los campos del formulario
             const songInput = document.getElementById('song');
@@ -2150,7 +2184,7 @@
             }
         }
         
-        // Función para verificar con ID de transacción
+        // Función para verificar con ID de transacción - MEJORADA
         function verifyWithTransactionId() {
             const transactionId = document.getElementById('transactionId').value.trim();
             
@@ -2159,28 +2193,59 @@
                 return;
             }
             
-            // Simular verificación con el ID de transacción
-            // En un entorno real, esto se haría a través del backend
-            paymentVerified = true;
+            // Mostrar indicador de carga
+            const verifyButton = event.target;
+            const originalText = verifyButton.innerHTML;
+            verifyButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando...';
+            verifyButton.disabled = true;
             
-            // Ocultar el diálogo de verificación manual
-            document.getElementById('manualVerification').style.display = 'none';
-            
-            // Mostrar mensaje de verificación
-            document.getElementById('paymentVerified').style.display = 'block';
-            
-            // Cambiar el estado del botón de WhatsApp
-            const whatsappStatus = document.getElementById('whatsappStatus');
-            whatsappStatus.innerHTML = '<i class="fas fa-check-circle"></i> Pago verificado manualmente. Ya puedes enviar tu solicitud.';
-            whatsappStatus.className = 'unlocked';
-            
-            // Habilitar el botón de envío
-            const sendButton = document.getElementById('sendButton');
-            sendButton.disabled = false;
-            sendButton.classList.add('ready');
-            
-            // Actualizar la barra de progreso
-            updateProgressBar(4);
+            // Realizar la verificación con el backend
+            fetch('/verificar-pago-manual', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    paymentId: transactionId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.aprobado) {
+                    // Pago verificado correctamente
+                    paymentVerified = true;
+                    
+                    // Ocultar el diálogo de verificación manual
+                    document.getElementById('manualVerification').style.display = 'none';
+                    
+                    // Mostrar mensaje de verificación
+                    document.getElementById('paymentVerified').style.display = 'block';
+                    
+                    // Cambiar el estado del botón de WhatsApp
+                    const whatsappStatus = document.getElementById('whatsappStatus');
+                    whatsappStatus.innerHTML = '<i class="fas fa-check-circle"></i> Pago verificado manualmente. Ya puedes enviar tu solicitud.';
+                    whatsappStatus.className = 'unlocked';
+                    
+                    // Habilitar el botón de envío
+                    const sendButton = document.getElementById('sendButton');
+                    sendButton.disabled = false;
+                    sendButton.classList.add('ready');
+                    
+                    // Actualizar la barra de progreso
+                    updateProgressBar(4);
+                } else {
+                    alert('El ID de transacción ingresado no corresponde a un pago aprobado. Por favor, verifica e intenta nuevamente.');
+                }
+            })
+            .catch(error => {
+                console.error('Error al verificar el pago:', error);
+                alert('Error al verificar el pago. Por favor, intenta nuevamente más tarde.');
+            })
+            .finally(() => {
+                // Restaurar el botón
+                verifyButton.innerHTML = originalText;
+                verifyButton.disabled = false;
+            });
         }
         
         // Función para mostrar/ocultar la verificación manual
@@ -2189,7 +2254,7 @@
             manualVerification.style.display = manualVerification.style.display === 'block' ? 'none' : 'block';
         }
         
-        // Función para enviar la solicitud por WhatsApp
+        // Función para enviar la solicitud por WhatsApp - CORREGIDA
         function sendRequest() {
             if (!paymentVerified) {
                 alert('Por favor, completa el pago antes de enviar tu solicitud');
@@ -2227,8 +2292,8 @@
             // Codificar el mensaje para URL
             const encodedMessage = encodeURIComponent(message);
             
-            // Número de teléfono del DJ (reemplazar con el número real)
-            const phoneNumber = '5491123456789'; // Formato internacional sin espacios ni guiones
+            // Número de teléfono del DJ - CORREGIDO
+            const phoneNumber = '5493834619831'; // Formato internacional sin espacios ni guiones
             
             // Crear el enlace de WhatsApp
             const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
