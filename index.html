@@ -88,6 +88,64 @@
             100% { opacity: 0.15; }
         }
         
+        /* Cabecera con elementos posicionados - MODIFICADO */
+        .header-section {
+            position: relative;
+            margin-bottom: 25px;
+            padding-top: 60px; /* Espacio para los elementos posicionados */
+        }
+        
+        /* Interruptor de modo oscuro/claro - MODIFICADO */
+        .theme-switch {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 20; /* Z-index más alto */
+            background: rgba(15, 15, 25, 0.7);
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(153, 69, 255, 0.2);
+        }
+        
+        .theme-switch-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .theme-switch-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: rgba(153, 69, 255, 0.2);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .theme-switch-toggle::before {
+            content: '';
+            position: absolute;
+            top: 2.5px;
+            left: 2.5px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .theme-switch.active .theme-switch-toggle {
+            background: var(--neon-primary);
+        }
+        
+        .theme-switch.active .theme-switch-toggle::before {
+            transform: translateX(25px);
+        }
+        
+        /* Botón de información - MODIFICADO */
         .info-link {
             position: absolute;
             top: 15px;
@@ -97,7 +155,11 @@
             font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s;
-            z-index: 10;
+            z-index: 20; /* Z-index más alto */
+            background: rgba(15, 15, 25, 0.7);
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(153, 69, 255, 0.2);
             text-decoration: underline;
             text-underline-offset: 3px;
             animation: infoPulse 3s infinite alternate;
@@ -112,6 +174,72 @@
             color: var(--neon-purple);
             text-shadow: 0 0 10px rgba(192, 132, 252, 0.7);
             transform: scale(1.05);
+        }
+        
+        /* Barra de progreso - MODIFICADO */
+        .progress-container {
+            margin-bottom: 30px;
+            position: relative;
+            padding-top: 15px;
+        }
+        
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(153, 69, 255, 0.2);
+            z-index: 1;
+        }
+        
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .progress-step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(153, 69, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+        }
+        
+        .progress-step.active .progress-step-circle {
+            background: var(--neon-primary);
+            box-shadow: 0 0 10px rgba(153, 69, 255, 0.5);
+        }
+        
+        .progress-step.completed .progress-step-circle {
+            background: var(--neon-accent);
+            box-shadow: 0 0 10px rgba(217, 70, 239, 0.5);
+        }
+        
+        .progress-step-text {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+        
+        .progress-step.active .progress-step-text,
+        .progress-step.completed .progress-step-text {
+            color: var(--neon-primary);
         }
         
         header {
@@ -350,6 +478,16 @@
             box-shadow: none;
         }
         
+        .btn-primary.ready {
+            animation: pulseReady 2s infinite;
+        }
+        
+        @keyframes pulseReady {
+            0% { box-shadow: 0 0 20px rgba(153, 69, 255, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(37, 211, 102, 0.6); }
+            100% { box-shadow: 0 0 20px rgba(153, 69, 255, 0.3); }
+        }
+        
         .btn-primary.verified {
             animation: heartbeat 1.5s infinite;
         }
@@ -454,10 +592,27 @@
             border-color: var(--neon-primary);
             box-shadow: 0 0 20px rgba(153, 69, 255, 0.3);
             color: white;
+            animation: glowPulse 1.5s infinite alternate;
         }
         
         .tip-option.selected::before {
             opacity: 1;
+        }
+        
+        /* Nueva animación de brillo para las opciones seleccionadas */
+        @keyframes glowPulse {
+            0% { 
+                box-shadow: 0 0 20px rgba(153, 69, 255, 0.3);
+                text-shadow: 0 0 5px rgba(153, 69, 255, 0.5);
+            }
+            50% { 
+                box-shadow: 0 0 30px rgba(153, 69, 255, 0.8), 0 0 40px rgba(153, 69, 255, 0.4);
+                text-shadow: 0 0 10px rgba(153, 69, 255, 0.8);
+            }
+            100% { 
+                box-shadow: 0 0 20px rgba(153, 69, 255, 0.3);
+                text-shadow: 0 0 5px rgba(153, 69, 255, 0.5);
+            }
         }
         
         .payment-methods {
@@ -894,6 +1049,233 @@
             margin-top: 5px;
         }
         
+        /* Historial de solicitudes */
+        .history-section {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 15px;
+            border: 1px solid rgba(153, 69, 255, 0.1);
+            display: none;
+        }
+        
+        .history-section.show {
+            display: block;
+        }
+        
+        .history-section h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--neon-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 800;
+        }
+        
+        .history-item {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(153, 69, 255, 0.1);
+        }
+        
+        .history-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .history-song {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        
+        .history-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .history-date {
+            font-style: italic;
+        }
+        
+        /* Canciones populares - REUBICADO */
+        .popular-songs {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 15px;
+            border: 1px solid rgba(153, 69, 255, 0.1);
+        }
+        
+        .popular-songs h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--neon-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 800;
+        }
+        
+        .popular-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .popular-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .popular-item:hover {
+            background: rgba(153, 69, 255, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .popular-rank {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--neon-primary);
+            margin-right: 15px;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .popular-info {
+            flex: 1;
+        }
+        
+        .popular-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 3px;
+        }
+        
+        .popular-artist {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .popular-count {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+        
+        /* Modo claro */
+        body.light-mode {
+            --bg-dark: #f5f5f5;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --text-primary: #333333;
+            --text-secondary: #666666;
+        }
+        
+        body.light-mode {
+            background: linear-gradient(135deg, rgba(245, 245, 245, 0.9), rgba(235, 235, 235, 0.9)), 
+                        url('https://images.unsplash.com/photo-1516420386105-2c457373e59c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+        }
+        
+        body.light-mode .container {
+            background: var(--card-bg);
+            box-shadow: 
+                0 0 20px rgba(0, 0, 0, 0.1),
+                inset 0 0 15px rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(153, 69, 255, 0.2);
+        }
+        
+        body.light-mode input, 
+        body.light-mode select {
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--text-primary);
+            border: 1px solid rgba(153, 69, 255, 0.3);
+        }
+        
+        body.light-mode input:focus, 
+        body.light-mode select:focus {
+            background: rgba(0, 0, 0, 0.08);
+        }
+        
+        body.light-mode .suggestions {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(153, 69, 255, 0.3);
+        }
+        
+        body.light-mode .video-previews {
+            background: rgba(255, 255, 255, 0.8);
+        }
+        
+        body.light-mode .payment-section,
+        body.light-mode .instructions,
+        body.light-mode .contact-section,
+        body.light-mode .history-section,
+        body.light-mode .popular-songs {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(153, 69, 255, 0.2);
+        }
+        
+        body.light-mode .whatsapp-section {
+            background: rgba(37, 211, 102, 0.1);
+            border: 1px solid rgba(37, 211, 102, 0.2);
+        }
+        
+        body.light-mode .tip-option {
+            background: rgba(153, 69, 255, 0.05);
+        }
+        
+        body.light-mode .payment-method {
+            background: rgba(153, 69, 255, 0.05);
+            border: 1px solid rgba(153, 69, 255, 0.1);
+        }
+        
+        body.light-mode .payment-method:hover {
+            background: rgba(153, 69, 255, 0.1);
+        }
+        
+        body.light-mode .history-item,
+        body.light-mode .popular-item {
+            background: rgba(153, 69, 255, 0.05);
+            border: 1px solid rgba(153, 69, 255, 0.1);
+        }
+        
+        body.light-mode .popular-item:hover {
+            background: rgba(153, 69, 255, 0.1);
+        }
+        
+        body.light-mode .selected-song-display,
+        body.light-mode .thank-you-message,
+        body.light-mode .payment-verified,
+        body.light-mode .payment-confirmation,
+        body.light-mode .manual-verification,
+        body.light-mode .another-request-section {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(153, 69, 255, 0.2);
+        }
+        
+        body.light-mode footer {
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Ajustes para el interruptor de modo en modo claro */
+        body.light-mode .theme-switch {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(153, 69, 255, 0.3);
+        }
+        
+        body.light-mode .info-link {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(153, 69, 255, 0.3);
+        }
+        
         @media (max-width: 600px) {
             .container {
                 padding: 20px;
@@ -927,18 +1309,67 @@
             .confirmation-buttons {
                 flex-direction: column;
             }
+            
+            .progress-step-text {
+                font-size: 0.7rem;
+            }
+            
+            /* Ajustes para elementos posicionados en móviles */
+            .theme-switch {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+                padding: 5px 8px;
+            }
+            
+            .info-link {
+                padding: 5px 8px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Interruptor de modo oscuro/claro - MODIFICADO -->
+        <div class="theme-switch" id="themeSwitch">
+            <span class="theme-switch-label">Modo</span>
+            <div class="theme-switch-toggle"></div>
+        </div>
+        
+        <!-- Botón de información - MODIFICADO -->
         <div class="info-link" id="infoLink">¿Cómo funciona?</div>
         
-        <header>
-            <div class="logo">🎵</div>
-            <h1>Pide tu canción al DJ</h1>
-            <p class="tagline">La mejor música para tu fiesta - DJ David Agüero</p>
-        </header>
+        <!-- Cabecera con barra de progreso - MODIFICADO -->
+        <div class="header-section">
+            <!-- Barra de progreso -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-step active" id="step1">
+                        <div class="progress-step-circle">1</div>
+                        <div class="progress-step-text">Canción</div>
+                    </div>
+                    <div class="progress-step" id="step2">
+                        <div class="progress-step-circle">2</div>
+                        <div class="progress-step-text">Datos</div>
+                    </div>
+                    <div class="progress-step" id="step3">
+                        <div class="progress-step-circle">3</div>
+                        <div class="progress-step-text">Pago</div>
+                    </div>
+                    <div class="progress-step" id="step4">
+                        <div class="progress-step-circle">4</div>
+                        <div class="progress-step-text">Enviar</div>
+                    </div>
+                </div>
+            </div>
+            
+            <header>
+                <div class="logo">🎵</div>
+                <h1>Pide tu canción al DJ</h1>
+                <p class="tagline">La mejor música para tu fiesta - DJ David Agüero</p>
+            </header>
+        </div>
         
         <div id="mainContent">
             <div class="form-group">
@@ -1046,6 +1477,14 @@
                 <p>Al confirmar, se abrirá WhatsApp para enviar tu solicitud directamente al DJ</p>
             </div>
             
+            <!-- Sección de historial -->
+            <div class="history-section" id="historySection">
+                <h3><i class="fas fa-history"></i> Historial de solicitudes</h3>
+                <div id="historyList">
+                    <p style="text-align: center; color: var(--text-secondary);">No hay solicitudes anteriores</p>
+                </div>
+            </div>
+            
             <div class="instructions" id="instructions">
                 <h3>¿Cómo funciona?</h3>
                 <div class="step">
@@ -1070,6 +1509,37 @@
                 </div>
                 
                 <p><strong>Nota:</strong> El sistema verifica automáticamente los pagos. No es posible enviar solicitudes sin haber realizado el pago primero.</p>
+            </div>
+            
+            <!-- Sección de canciones populares - REUBICADA -->
+            <div class="popular-songs">
+                <h3><i class="fas fa-fire"></i> Canciones populares</h3>
+                <div class="popular-list" id="popularList">
+                    <div class="popular-item" data-song="Despacito" data-artist="Luis Fonsi">
+                        <div class="popular-rank">1</div>
+                        <div class="popular-info">
+                            <div class="popular-title">Despacito</div>
+                            <div class="popular-artist">Luis Fonsi</div>
+                        </div>
+                        <div class="popular-count">15 solicitudes</div>
+                    </div>
+                    <div class="popular-item" data-song="Shape of You" data-artist="Ed Sheeran">
+                        <div class="popular-rank">2</div>
+                        <div class="popular-info">
+                            <div class="popular-title">Shape of You</div>
+                            <div class="popular-artist">Ed Sheeran</div>
+                        </div>
+                        <div class="popular-count">12 solicitudes</div>
+                    </div>
+                    <div class="popular-item" data-song="Dakiti" data-artist="Bad Bunny">
+                        <div class="popular-rank">3</div>
+                        <div class="popular-info">
+                            <div class="popular-title">Dakiti</div>
+                            <div class="popular-artist">Bad Bunny</div>
+                        </div>
+                        <div class="popular-count">10 solicitudes</div>
+                    </div>
+                </div>
             </div>
             
             <div class="contact-section">
@@ -1119,6 +1589,9 @@
         let paymentSessionId = '';
         let mp = null;
         let paymentInitiated = false;
+        let selectedVideo = null;
+        let searchTimeout = null;
+        let youtubeApiKey = 'AIzaSyC8Ih8ETEbnGIDLBZxP-XmLlG4l1L9xi7g';
         
         // Credenciales de Mercado Pago
         const MERCADO_PAGO_PUBLIC_KEY = 'APP_USR-89dd78c0-25de-4479-aa45-b0873d255cad';
@@ -1160,4 +1633,675 @@
             const date = new Date();
             date.setTime(date.getTime() + (hours * 60 * 60 * 1000));
             const expires = "expires=" + date.toUTCString();
-            document.cookie = name + "=" + value + ";" + expires +
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+        }
+        
+        // Función para obtener una cookie
+        function getCookie(name) {
+            const cname = name + "=";
+            const decodedCookie = decodeURIComponent(document.cookie);
+            const ca = decodedCookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(cname) === 0) {
+                    return c.substring(cname.length, c.length);
+                }
+            }
+            return "";
+        }
+        
+        // Función para guardar en el historial
+        function saveToHistory(song, artist, dedication) {
+            let history = JSON.parse(localStorage.getItem('songHistory') || '[]');
+            
+            // Añadir nueva solicitud al historial
+            history.unshift({
+                song: song,
+                artist: artist,
+                dedication: dedication,
+                date: new Date().toISOString()
+            });
+            
+            // Limitar el historial a 10 elementos
+            if (history.length > 10) {
+                history = history.slice(0, 10);
+            }
+            
+            // Guardar en localStorage
+            localStorage.setItem('songHistory', JSON.stringify(history));
+            
+            // Actualizar la visualización del historial
+            updateHistoryDisplay();
+        }
+        
+        // Función para actualizar la visualización del historial
+        function updateHistoryDisplay() {
+            const history = JSON.parse(localStorage.getItem('songHistory') || '[]');
+            const historyList = document.getElementById('historyList');
+            const historySection = document.getElementById('historySection');
+            
+            if (history.length === 0) {
+                historyList.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">No hay solicitudes anteriores</p>';
+                historySection.classList.remove('show');
+            } else {
+                historyList.innerHTML = '';
+                history.forEach(item => {
+                    const date = new Date(item.date);
+                    const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'history-item';
+                    historyItem.innerHTML = `
+                        <div class="history-song">${item.song}</div>
+                        <div class="history-details">
+                            <span>${item.artist || 'Artista desconocido'}</span>
+                            <span class="history-date">${formattedDate}</span>
+                        </div>
+                    `;
+                    historyList.appendChild(historyItem);
+                });
+                historySection.classList.add('show');
+            }
+        }
+        
+        // Función para actualizar las canciones populares
+        function updatePopularSongs() {
+            const popularList = document.getElementById('popularList');
+            const popularItems = popularList.querySelectorAll('.popular-item');
+            
+            popularItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const song = this.getAttribute('data-song');
+                    const artist = this.getAttribute('data-artist');
+                    
+                    // Rellenar el campo de canción
+                    document.getElementById('song').value = `${song} - ${artist}`;
+                    
+                    // Actualizar la barra de progreso
+                    updateProgressBar(1);
+                    
+                    // Ocultar sugerencias
+                    document.getElementById('songSuggestions').style.display = 'none';
+                    
+                    // Scroll al formulario
+                    document.querySelector('.form-group').scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+        }
+        
+        // Función para actualizar la barra de progreso
+        function updateProgressBar(step) {
+            // Actualizar los pasos de la barra de progreso
+            for (let i = 1; i <= 4; i++) {
+                const stepElement = document.getElementById(`step${i}`);
+                if (i < step) {
+                    stepElement.classList.add('completed');
+                    stepElement.classList.remove('active');
+                } else if (i === step) {
+                    stepElement.classList.add('active');
+                    stepElement.classList.remove('completed');
+                } else {
+                    stepElement.classList.remove('active', 'completed');
+                }
+            }
+        }
+        
+        // Función para rotar imágenes de fondo
+        function rotateBackground() {
+            currentImageIndex = (currentImageIndex + 1) % backgroundImages.length;
+            document.body.style.backgroundImage = `linear-gradient(135deg, rgba(10, 10, 18, 0.9), rgba(20, 20, 35, 0.9)), url('${backgroundImages[currentImageIndex]}')`;
+        }
+        
+        // Inicializar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar Mercado Pago
+            mp = new MercadoPago(MERCADO_PAGO_PUBLIC_KEY);
+            
+            // Generar un ID de sesión único
+            paymentSessionId = generateFingerprint() + '_' + Date.now();
+            
+            // Establecer una cookie con el ID de sesión
+            setCookie('paymentSessionId', paymentSessionId, 24);
+            
+            // Configurar eventos de los campos del formulario
+            const songInput = document.getElementById('song');
+            const nameInput = document.getElementById('name');
+            const dedicationInput = document.getElementById('dedication');
+            
+            // Evento para el campo de canción (búsqueda en YouTube)
+            songInput.addEventListener('input', function() {
+                const query = this.value.trim();
+                
+                // Actualizar la barra de progreso
+                if (query) {
+                    updateProgressBar(1);
+                }
+                
+                // Limpiar el timeout anterior
+                if (searchTimeout) {
+                    clearTimeout(searchTimeout);
+                }
+                
+                // Si la consulta es muy corta, ocultar sugerencias
+                if (query.length < 2) {
+                    document.getElementById('songSuggestions').style.display = 'none';
+                    return;
+                }
+                
+                // Configurar un nuevo timeout para la búsqueda
+                searchTimeout = setTimeout(() => {
+                    searchYouTube(query);
+                }, 300);
+            });
+            
+            // Evento para perder el foco del campo de canción
+            songInput.addEventListener('blur', function() {
+                // Ocultar sugerencias después de un pequeño retraso
+                setTimeout(() => {
+                    document.getElementById('songSuggestions').style.display = 'none';
+                }, 200);
+            });
+            
+            // Eventos para los campos de nombre y dedicación
+            nameInput.addEventListener('input', function() {
+                if (this.value.trim()) {
+                    updateProgressBar(2);
+                }
+            });
+            
+            dedicationInput.addEventListener('input', function() {
+                if (this.value.trim()) {
+                    updateProgressBar(2);
+                }
+            });
+            
+            // Configurar eventos para las opciones de propina - CORREGIDO
+            const tipOptions = document.querySelectorAll('.tip-option');
+            tipOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remover la clase selected de todas las opciones
+                    tipOptions.forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Añadir la clase selected a la opción actual
+                    this.classList.add('selected');
+                    
+                    // Actualizar las variables globales
+                    selectedTipAmount = parseInt(this.getAttribute('data-amount'));
+                    selectedPaymentLink = this.getAttribute('data-link');
+                    
+                    // Actualizar la barra de progreso
+                    updateProgressBar(3);
+                    
+                    // Actualizar el código QR
+                    document.getElementById('paymentQR').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://mpago.la/${selectedPaymentLink}&color=1a2a6c&bgcolor=ffffff`;
+                });
+            });
+            
+            // Configurar evento para el enlace de información
+            document.getElementById('infoLink').addEventListener('click', function() {
+                const instructions = document.getElementById('instructions');
+                instructions.classList.toggle('show');
+            });
+            
+            // Configurar evento para el interruptor de tema
+            const themeSwitch = document.getElementById('themeSwitch');
+            themeSwitch.addEventListener('click', function() {
+                this.classList.toggle('active');
+                document.body.classList.toggle('light-mode');
+                
+                // Guardar preferencia en localStorage
+                const isLightMode = document.body.classList.contains('light-mode');
+                localStorage.setItem('lightMode', isLightMode);
+            });
+            
+            // Cargar preferencia de tema
+            const savedLightMode = localStorage.getItem('lightMode') === 'true';
+            if (savedLightMode) {
+                themeSwitch.classList.add('active');
+                document.body.classList.add('light-mode');
+            }
+            
+            // Configurar rotación de imágenes de fondo
+            setInterval(rotateBackground, 30000); // Cambiar cada 30 segundos
+            
+            // Actualizar historial y canciones populares
+            updateHistoryDisplay();
+            updatePopularSongs();
+            
+            // Seleccionar la primera opción de propina por defecto - CORREGIDO
+            if (tipOptions.length > 0) {
+                tipOptions[0].click();
+            }
+        });
+        
+        // Función para buscar en YouTube
+        async function searchYouTube(query) {
+            const suggestionsContainer = document.getElementById('songSuggestions');
+            
+            try {
+                // Realizar la petición a nuestro backend
+                const response = await fetch(`/buscar-canciones?q=${encodeURIComponent(query)}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Error en la respuesta: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Limpiar las sugerencias anteriores
+                suggestionsContainer.innerHTML = '';
+                
+                // Si no hay resultados, mostrar un mensaje
+                if (!data.resultados || data.resultados.length === 0) {
+                    suggestionsContainer.innerHTML = '<div class="suggestion-item">No se encontraron resultados</div>';
+                    suggestionsContainer.style.display = 'block';
+                    return;
+                }
+                
+                // Mostrar los resultados
+                data.resultados.forEach(video => {
+                    const suggestionItem = document.createElement('div');
+                    suggestionItem.className = 'suggestion-item';
+                    suggestionItem.innerHTML = `
+                        <div>${video.titulo}</div>
+                        <div class="artist">${video.artista}</div>
+                    `;
+                    
+                    // Configurar evento para seleccionar la canción
+                    suggestionItem.addEventListener('click', function() {
+                        document.getElementById('song').value = `${video.titulo} - ${video.artista}`;
+                        suggestionsContainer.style.display = 'none';
+                        
+                        // Mostrar vista previa del video
+                        showVideoPreview([video]);
+                    });
+                    
+                    suggestionsContainer.appendChild(suggestionItem);
+                });
+                
+                // Mostrar el contenedor de sugerencias
+                suggestionsContainer.style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error al buscar en YouTube:', error);
+                suggestionsContainer.innerHTML = '<div class="suggestion-item">Error al buscar canciones</div>';
+                suggestionsContainer.style.display = 'block';
+            }
+        }
+        
+        // Función para mostrar vista previa del video
+        function showVideoPreview(videos) {
+            const videoPreviews = document.getElementById('videoPreviews');
+            const videoList = document.getElementById('videoList');
+            
+            // Limpiar la lista de videos
+            videoList.innerHTML = '';
+            
+            // Si no hay videos, ocultar el contenedor
+            if (!videos || videos.length === 0) {
+                videoPreviews.classList.remove('show');
+                return;
+            }
+            
+            // Mostrar los videos
+            videos.forEach(video => {
+                const videoItem = document.createElement('div');
+                videoItem.className = 'video-item';
+                videoItem.innerHTML = `
+                    <div class="video-thumbnail" style="background-image: url('${video.thumbnail}')">
+                        <div class="video-duration">3:45</div>
+                    </div>
+                    <div class="video-title">${video.titulo}</div>
+                `;
+                
+                // Configurar evento para seleccionar el video
+                videoItem.addEventListener('click', function() {
+                    // Remover la clase selected de todos los videos
+                    document.querySelectorAll('.video-item').forEach(item => {
+                        item.classList.remove('selected');
+                    });
+                    
+                    // Añadir la clase selected al video actual
+                    this.classList.add('selected');
+                    
+                    // Guardar el video seleccionado
+                    selectedVideo = video;
+                });
+                
+                videoList.appendChild(videoItem);
+            });
+            
+            // Mostrar el contenedor de vista previa
+            videoPreviews.classList.add('show');
+            
+            // Seleccionar el primer video por defecto
+            if (videos.length > 0) {
+                videoList.firstChild.click();
+            }
+        }
+        
+        // Función para abrir el enlace de pago
+        function openPaymentLink() {
+            // Registrar el inicio del pago
+            paymentInitiated = true;
+            
+            // Abrir el enlace de pago en una nueva ventana
+            window.open(`https://mpago.la/${selectedPaymentLink}`, '_blank');
+            
+            // Mostrar el diálogo de confirmación de pago
+            document.getElementById('paymentConfirmation').style.display = 'block';
+            
+            // Actualizar la barra de progreso
+            updateProgressBar(3);
+        }
+        
+        // Función para mostrar/ocultar el código QR
+        function toggleQR() {
+            const qrCode = document.getElementById('qrCode');
+            qrCode.style.display = qrCode.style.display === 'flex' ? 'none' : 'flex';
+            
+            // Registrar el inicio del pago
+            paymentInitiated = true;
+            
+            // Mostrar el diálogo de confirmación de pago
+            document.getElementById('paymentConfirmation').style.display = 'block';
+            
+            // Actualizar la barra de progreso
+            updateProgressBar(3);
+        }
+        
+        // Función para confirmar el pago
+        function confirmPayment() {
+            // Ocultar el diálogo de confirmación
+            document.getElementById('paymentConfirmation').style.display = 'none';
+            
+            // Registrar el pago en el backend
+            registerPayment();
+            
+            // Comenzar a verificar el pago
+            checkPaymentStatus();
+        }
+        
+        // Función para cancelar el pago
+        function cancelPayment() {
+            // Ocultar el diálogo de confirmación
+            document.getElementById('paymentConfirmation').style.display = 'none';
+            
+            // Resetear el estado del pago
+            paymentInitiated = false;
+        }
+        
+        // Función para registrar el pago en el backend
+        async function registerPayment() {
+            try {
+                // Generar un ID de pago simulado (en un entorno real, esto vendría de Mercado Pago)
+                const paymentId = 'PAYMENT_' + Date.now();
+                
+                // Enviar el ID de pago al backend
+                const response = await fetch('/registrar-pago', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        sessionId: paymentSessionId,
+                        paymentId: paymentId
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Error al registrar el pago: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.registrado) {
+                    console.log('Pago registrado correctamente');
+                } else {
+                    console.error('Error al registrar el pago');
+                }
+                
+            } catch (error) {
+                console.error('Error al registrar el pago:', error);
+                
+                // Mostrar información de depuración
+                const debugInfo = document.getElementById('debugInfo');
+                const debugText = document.getElementById('debugText');
+                debugText.textContent = error.message;
+                debugInfo.style.display = 'block';
+            }
+        }
+        
+        // Función para verificar el estado del pago
+        async function checkPaymentStatus() {
+            if (checkingPayment) return;
+            
+            checkingPayment = true;
+            
+            try {
+                // Mostrar indicador de carga
+                const whatsappStatus = document.getElementById('whatsappStatus');
+                const originalText = whatsappStatus.innerHTML;
+                whatsappStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando pago...';
+                
+                // Realizar la petición al backend
+                const response = await fetch('/verificar-pago', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        sessionId: paymentSessionId
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Error al verificar el pago: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Restaurar el texto original
+                whatsappStatus.innerHTML = originalText;
+                
+                if (data.aprobado) {
+                    // Pago aprobado
+                    paymentVerified = true;
+                    
+                    // Mostrar mensaje de verificación
+                    document.getElementById('paymentVerified').style.display = 'block';
+                    
+                    // Cambiar el estado del botón de WhatsApp
+                    whatsappStatus.innerHTML = '<i class="fas fa-check-circle"></i> Pago verificado. Ya puedes enviar tu solicitud.';
+                    whatsappStatus.className = 'unlocked';
+                    
+                    // Habilitar el botón de envío
+                    const sendButton = document.getElementById('sendButton');
+                    sendButton.disabled = false;
+                    sendButton.classList.add('ready');
+                    
+                    // Actualizar la barra de progreso
+                    updateProgressBar(4);
+                } else {
+                    // Pago no aprobado, volver a verificar después de un tiempo
+                    setTimeout(checkPaymentStatus, 5000);
+                }
+                
+            } catch (error) {
+                console.error('Error al verificar el pago:', error);
+                
+                // Restaurar el texto original
+                const whatsappStatus = document.getElementById('whatsappStatus');
+                whatsappStatus.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error al verificar el pago. Inténtalo de nuevo.';
+                
+                // Mostrar información de depuración
+                const debugInfo = document.getElementById('debugInfo');
+                const debugText = document.getElementById('debugText');
+                debugText.textContent = error.message;
+                debugInfo.style.display = 'block';
+                
+                // Mostrar opción de verificación manual
+                document.getElementById('manualVerification').style.display = 'block';
+            } finally {
+                checkingPayment = false;
+            }
+        }
+        
+        // Función para verificar con ID de transacción
+        function verifyWithTransactionId() {
+            const transactionId = document.getElementById('transactionId').value.trim();
+            
+            if (!transactionId) {
+                alert('Por favor, ingresa un ID de transacción válido');
+                return;
+            }
+            
+            // Simular verificación con el ID de transacción
+            // En un entorno real, esto se haría a través del backend
+            paymentVerified = true;
+            
+            // Ocultar el diálogo de verificación manual
+            document.getElementById('manualVerification').style.display = 'none';
+            
+            // Mostrar mensaje de verificación
+            document.getElementById('paymentVerified').style.display = 'block';
+            
+            // Cambiar el estado del botón de WhatsApp
+            const whatsappStatus = document.getElementById('whatsappStatus');
+            whatsappStatus.innerHTML = '<i class="fas fa-check-circle"></i> Pago verificado manualmente. Ya puedes enviar tu solicitud.';
+            whatsappStatus.className = 'unlocked';
+            
+            // Habilitar el botón de envío
+            const sendButton = document.getElementById('sendButton');
+            sendButton.disabled = false;
+            sendButton.classList.add('ready');
+            
+            // Actualizar la barra de progreso
+            updateProgressBar(4);
+        }
+        
+        // Función para mostrar/ocultar la verificación manual
+        function toggleManualVerification() {
+            const manualVerification = document.getElementById('manualVerification');
+            manualVerification.style.display = manualVerification.style.display === 'block' ? 'none' : 'block';
+        }
+        
+        // Función para enviar la solicitud por WhatsApp
+        function sendRequest() {
+            if (!paymentVerified) {
+                alert('Por favor, completa el pago antes de enviar tu solicitud');
+                return;
+            }
+            
+            // Obtener los datos del formulario
+            const song = document.getElementById('song').value.trim();
+            const name = document.getElementById('name').value.trim();
+            const dedication = document.getElementById('dedication').value.trim();
+            
+            // Validar los datos
+            if (!song) {
+                alert('Por favor, ingresa el nombre de la canción');
+                return;
+            }
+            
+            if (!name) {
+                alert('Por favor, ingresa tu nombre');
+                return;
+            }
+            
+            // Crear el mensaje para WhatsApp
+            let message = `*Nueva solicitud de canción*\n\n`;
+            message += `*Canción:* ${song}\n`;
+            message += `*Nombre:* ${name}\n`;
+            
+            if (dedication) {
+                message += `*Dedicación:* ${dedication}\n`;
+            }
+            
+            message += `*Monto de propina:* $${selectedTipAmount}\n\n`;
+            message += `*ID de sesión:* ${paymentSessionId}`;
+            
+            // Codificar el mensaje para URL
+            const encodedMessage = encodeURIComponent(message);
+            
+            // Número de teléfono del DJ (reemplazar con el número real)
+            const phoneNumber = '5491123456789'; // Formato internacional sin espacios ni guiones
+            
+            // Crear el enlace de WhatsApp
+            const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+            
+            // Abrir WhatsApp
+            window.open(whatsappLink, '_blank');
+            
+            // Guardar en el historial
+            saveToHistory(song, selectedVideo ? selectedVideo.artista : '', dedication);
+            
+            // Marcar la solicitud como enviada
+            requestSent = true;
+            
+            // Mostrar mensaje de agradecimiento
+            showThankYouMessage(song);
+        }
+        
+        // Función para mostrar el mensaje de agradecimiento
+        function showThankYouMessage(song) {
+            // Ocultar el contenido principal
+            document.getElementById('mainContent').style.display = 'none';
+            
+            // Mostrar el mensaje de agradecimiento
+            const thankYouContent = document.getElementById('thankYouContent');
+            thankYouContent.style.display = 'block';
+            
+            // Mostrar la canción seleccionada
+            document.getElementById('finalSongDisplay').textContent = song;
+        }
+        
+        // Función para solicitar otra canción
+        function requestAnotherSong() {
+            // Reiniciar el formulario
+            document.getElementById('song').value = '';
+            document.getElementById('name').value = '';
+            document.getElementById('dedication').value = '';
+            
+            // Reiniciar el estado del pago
+            paymentVerified = false;
+            requestSent = false;
+            paymentInitiated = false;
+            
+            // Ocultar el mensaje de agradecimiento
+            document.getElementById('thankYouContent').style.display = 'none';
+            
+            // Mostrar el contenido principal
+            document.getElementById('mainContent').style.display = 'block';
+            
+            // Restablecer el estado del botón de WhatsApp
+            const whatsappStatus = document.getElementById('whatsappStatus');
+            whatsappStatus.innerHTML = '<i class="fas fa-lock"></i> Completa el pago para desbloquear el envío de tu solicitud';
+            whatsappStatus.className = 'locked';
+            
+            // Deshabilitar el botón de envío
+            const sendButton = document.getElementById('sendButton');
+            sendButton.disabled = true;
+            sendButton.classList.remove('ready');
+            
+            // Ocultar mensaje de verificación
+            document.getElementById('paymentVerified').style.display = 'none';
+            
+            // Actualizar la barra de progreso
+            updateProgressBar(1);
+            
+            // Scroll al principio de la página
+            window.scrollTo(0, 0);
+        }
+        
+        // Función para contactar para reservar
+        function contactForBooking() {
+            // Abrir Instagram en una nueva ventana
+            window.open('https://www.instagram.com/david_aguero_dj', '_blank');
+        }
+    </script>
+</body>
+</html>
