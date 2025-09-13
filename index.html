@@ -860,23 +860,38 @@
             color: #ff9999;
         }
         
-        .payment-success-notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(37, 211, 102, 0.9);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
+        .manual-verification {
             display: none;
-            animation: slideInRight 0.5s ease-out;
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255, 165, 0, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 165, 0, 0.3);
         }
         
-        @keyframes slideInRight {
-            from { transform: translateX(100%); }
-            to { transform: translateX(0); }
+        .manual-verification h4 {
+            color: #ffa500;
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .manual-verification p {
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .manual-verification input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        
+        .manual-verification button {
+            padding: 10px;
+            font-size: 1rem;
+            margin-top: 5px;
         }
         
         @media (max-width: 600px) {
@@ -1007,6 +1022,14 @@
                     </div>
                 </div>
                 
+                <div class="manual-verification" id="manualVerification">
+                    <h4><i class="fas fa-tools"></i> Verificación manual</h4>
+                    <p>Si has realizado el pago pero el sistema no lo detecta, puedes ingresar manualmente el ID de transacción para verificar tu pago.</p>
+                    <input type="text" id="transactionId" placeholder="Ingresa el ID de transacción">
+                    <button class="btn-primary" onclick="verifyWithTransactionId()">Verificar pago</button>
+                    <button class="btn-secondary" onclick="toggleManualVerification()">Cancelar</button>
+                </div>
+                
                 <div class="debug-info" id="debugInfo">
                     Información de depuración: <span id="debugText"></span>
                 </div>
@@ -1085,10 +1108,6 @@
         <p>© 2023 DJ David Agüero - "La mejor música para tus momentos especiales"</p>
     </footer>
     
-    <div class="payment-success-notification" id="paymentNotification">
-        <i class="fas fa-check-circle"></i> ¡Pago recibido correctamente! Ya puedes enviar tu solicitud.
-    </div>
-    
     <script src="https://sdk.mercadopago.com/js/v2"></script>
     <script>
         // Variables globales
@@ -1116,9 +1135,6 @@
         
         let currentImageIndex = 0;
         
-        // API Key de YouTube
-        const YOUTUBE_API_KEY = 'AIzaSyC8Ih8ETEbnGIDLBZxP-XmLlG4l1L9xi7g';
-        
         // Función para generar un fingerprint del navegador
         function generateFingerprint() {
             const navigatorInfo = window.navigator;
@@ -1144,21 +1160,4 @@
             const date = new Date();
             date.setTime(date.getTime() + (hours * 60 * 60 * 1000));
             const expires = "expires=" + date.toUTCString();
-            document.cookie = name + "=" + value + ";" + expires + ";path=/";
-        }
-        
-        // Función para obtener una cookie
-        function getCookie(name) {
-            const cname = name + "=";
-            const decodedCookie = decodeURIComponent(document.cookie);
-            const ca = decodedCookie.split(';');
-            for (let i = 0; i < ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0) === ' ') {
-                    c = c.substring(1);
-                }
-                if (c.indexOf(cname) === 0) {
-                    return c.substring(cname.length, c.length);
-                }
-            }
-            return "";
+            document.cookie = name + "=" + value + ";" + expires +
