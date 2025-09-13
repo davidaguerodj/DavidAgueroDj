@@ -1911,7 +1911,7 @@
             }
         });
         
-        // Función para buscar en YouTube
+        // Función para buscar en YouTube - CORREGIDA
         async function searchYouTube(query) {
             const suggestionsContainer = document.getElementById('songSuggestions');
             
@@ -1928,8 +1928,8 @@
                 // Limpiar las sugerencias anteriores
                 suggestionsContainer.innerHTML = '';
                 
-                // Si no hay resultados, mostrar un mensaje
-                if (!data.resultados || data.resultados.length === 0) {
+                // CORREGIDO: Verificar si hay resultados en la estructura correcta
+                if (!data || !data.resultados || data.resultados.length === 0) {
                     suggestionsContainer.innerHTML = '<div class="suggestion-item">No se encontraron resultados</div>';
                     suggestionsContainer.style.display = 'block';
                     return;
