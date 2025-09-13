@@ -903,9 +903,10 @@
                     <input type="text" id="song" placeholder="Ej: Despacito - Luis Fonsi" required>
                     <div class="suggestions" id="songSuggestions"></div>
                 </div>
-                <div class="input-hint">Escribe el nombre de la canción y el artista</div>
+                <div class="input-hint">Puedes escribir el nombre o pegar enlace de YouTube</div>
+                <div class="youtube-hint">(También puedes pegar un enlace de YouTube)</div>
                 <div class="video-previews" id="videoPreviews">
-                    <h4>Vista previa:</h4>
+                    <h4>Selecciona una versión:</h4>
                     <div class="video-list" id="videoList"></div>
                 </div>
             </div>
@@ -993,7 +994,7 @@
                 <h3>¿Cómo funciona?</h3>
                 <div class="step">
                     <div class="step-number">1</div>
-                    <div>Completa los datos de tu canción</div>
+                    <div>Completa los datos de tu canción (puedes pegar enlace de YouTube)</div>
                 </div>
                 <div class="step">
                     <div class="step-number">2</div>
@@ -1078,41 +1079,8 @@
         
         let currentImageIndex = 0;
         
-        // Lista de canciones populares para autocompletado
-        const popularSongs = [
-            { title: "Despacito", artist: "Luis Fonsi ft. Daddy Yankee" },
-            { title: "Shape of You", artist: "Ed Sheeran" },
-            { title: "Blinding Lights", artist: "The Weeknd" },
-            { title: "Dance Monkey", artist: "Tones and I" },
-            { title: "Uptown Funk", artist: "Mark Ronson ft. Bruno Mars" },
-            { title: "Thinking Out Loud", artist: "Ed Sheeran" },
-            { title: "Perfect", artist: "Ed Sheeran" },
-            { title: "Havana", artist: "Camila Cabello ft. Young Thug" },
-            { title: "Levitating", artist: "Dua Lipa" },
-            { title: "Stay", artist: "The Kid LAROI & Justin Bieber" },
-            { title: "Good 4 U", artist: "Olivia Rodrigo" },
-            { title: "Montero", artist: "Lil Nas X" },
-            { title: "Peaches", artist: "Justin Bieber ft. Daniel Caesar" },
-            { title: "Kiss Me More", artist: "Doja Cat ft. SZA" },
-            { title: "Bad Habits", artist: "Ed Sheeran" },
-            { title: "Easy On Me", artist: "Adele" },
-            { title: "Shivers", artist: "Ed Sheeran" },
-            { title: "My Universe", artist: "Coldplay & BTS" },
-            { title: "Industry Baby", artist: "Lil Nas X & Jack Harlow" },
-            { title: "Heat Waves", artist: "Glass Animals" },
-            { title: "La Bachata", artist: "Manuel Turizo" },
-            { title: "Provenza", artist: "Karol G" },
-            { title: "Tití Me Preguntó", artist: "Bad Bunny" },
-            { title: "Ojitos Lindos", artist: "Bad Bunny" },
-            { title: "Te Felicito", artist: "Shakira ft. Rauw Alejandro" },
-            { title: "Moscow Mule", artist: "Bad Bunny" },
-            { title: "Un Ratito", artist: "Bad Bunny" },
-            { title: "Después de la Playa", artist: "Rauw Alejandro" },
-            { title: "En La De Ella", artist: "Rauw Alejandro" },
-            { title: "Tarot", artist: "Bad Bunny" },
-            { title: "Otro Atardecer", artist: "Rauw Alejandro" },
-            { title: "Party", artist: "Bad Bunny & Rauw Alejandro" }
-        ];
+        // API Key de YouTube
+        const YOUTUBE_API_KEY = 'AIzaSyC8Ih8ETEbnGIDLBZxP-XmLlG4l1L9xi7g';
         
         // Función para generar un fingerprint del navegador
         function generateFingerprint() {
@@ -1349,7 +1317,7 @@
                 });
             });
             
-            // Configurar autocompletado para canciones
+            // Configurar autocompletado para canciones con YouTube API
             const songInput = document.getElementById('song');
             const suggestionsContainer = document.getElementById('songSuggestions');
             const videoPreviews = document.getElementById('videoPreviews');
@@ -1375,75 +1343,129 @@
                     return;
                 }
                 
-                // Es una búsqueda de texto
-                searchTimeout = setTimeout(() => {
-                    searchSongs(query);
-                }, 300);
+                // Verificar si es un enlace de YouTube
+                const youtubeRegex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/;
+                const match = query.match(youtubeRegex);
+                
+                if (match) {
+                    // Es un enlace de YouTube, obtener información del video
+                    getYouTubeVideoInfo(match[1]);
+                } else {
+                    // Es una búsqueda de texto
+                    searchTimeout = setTimeout(() => {
+                        searchYouTubeVideos(query);
+                    }, 500); // Esperar 500ms después de que el usuario deje de escribir
+                }
             });
             
-            // Función para buscar canciones en la lista local
-            function searchSongs(query) {
-                if (!query) return [];
-                
-                query = query.toLowerCase();
-                const results = popularSongs.filter(song => 
-                    song.title.toLowerCase().includes(query) || 
-                    song.artist.toLowerCase().includes(query)
-                );
-                
-                displaySearchResults(results);
+            // Función para buscar videos en YouTube
+            function searchYouTubeVideos(query) {
+                fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=5&key=${YOUTUBE_API_KEY}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.items && data.items.length > 0) {
+                            displaySearchResults(data.items);
+                        } else {
+                            suggestionsContainer.style.display = 'none';
+                            videoPreviews.classList.remove('show');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error al buscar videos de YouTube:', error);
+                        suggestionsContainer.style.display = 'none';
+                        videoPreviews.classList.remove('show');
+                    });
             }
             
             // Función para mostrar los resultados de búsqueda
-            function displaySearchResults(songs) {
+            function displaySearchResults(videos) {
                 suggestionsContainer.innerHTML = '';
                 
-                if (songs.length === 0) {
-                    suggestionsContainer.style.display = 'none';
-                    return;
-                }
-                
-                songs.forEach(song => {
+                videos.forEach(video => {
+                    const videoId = video.id.videoId;
+                    const title = video.snippet.title;
+                    const channel = video.snippet.channelTitle;
+                    
                     const item = document.createElement('div');
                     item.className = 'suggestion-item';
-                    item.innerHTML = `${song.title} <span class="artist">${song.artist}</span>`;
+                    item.innerHTML = `${title} <span class="artist">${channel}</span>`;
                     item.addEventListener('click', function() {
                         // Marcar que estamos seleccionando una sugerencia
                         isSelectingSuggestion = true;
                         
                         // Actualizar el campo de entrada
-                        songInput.value = `${song.title} - ${song.artist}`;
+                        songInput.value = `${title} - ${channel}`;
                         suggestionsContainer.style.display = 'none';
-                        
-                        // Mostrar una vista previa simple
-                        displaySimplePreview(song);
+                        getYouTubeVideoInfo(videoId);
                     });
                     suggestionsContainer.appendChild(item);
                 });
                 
                 suggestionsContainer.style.display = 'block';
+                
+                // No mostrar vista previa automáticamente para no ser intrusivo
             }
             
-            // Función para mostrar una vista previa simple
-            function displaySimplePreview(song) {
+            // Función para obtener información de un video específico de YouTube
+            function getYouTubeVideoInfo(videoId) {
+                fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${videoId}&key=${YOUTUBE_API_KEY}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.items && data.items.length > 0) {
+                            const video = data.items[0];
+                            const title = video.snippet.title;
+                            const channel = video.snippet.channelTitle;
+                            const duration = formatDuration(video.contentDetails.duration);
+                            const thumbnail = video.snippet.thumbnails.default.url;
+                            
+                            // Mostrar vista previa del video
+                            displayVideoPreview({
+                                id: videoId,
+                                title: title,
+                                artist: channel,
+                                duration: duration,
+                                thumbnail: thumbnail
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error al obtener información del video:', error);
+                    });
+            }
+            
+            // Función para formatear la duración del video
+            function formatDuration(duration) {
+                const match = duration.match(/PT(\d+)M(\d+)S/);
+                if (match) {
+                    return `${match[1]}:${match[2].padStart(2, '0')}`;
+                }
+                return '0:00';
+            }
+            
+            // Función para mostrar la vista previa del video
+            function displayVideoPreview(video) {
                 videoList.innerHTML = '';
                 
                 const videoItem = document.createElement('div');
                 videoItem.className = 'video-item selected';
-                
-                // Usar una imagen aleatoria basada en el título de la canción
-                const imageUrl = `https://picsum.photos/seed/${song.title.replace(/\s+/g, '')}/150/85.jpg`;
-                
                 videoItem.innerHTML = `
-                    <div class="video-thumbnail" style="background-image: url('${imageUrl}')">
-                        <div class="video-duration">3:45</div>
+                    <div class="video-thumbnail" style="background-image: url('${video.thumbnail}')">
+                        <div class="video-duration">${video.duration}</div>
                     </div>
-                    <div class="video-title">${song.title} - ${song.artist}</div>
+                    <div class="video-title">${video.title} - ${video.artist}</div>
                 `;
                 
                 videoItem.addEventListener('click', function() {
+                    // Remover la clase selected de todos los videos
+                    document.querySelectorAll('.video-item').forEach(item => {
+                        item.classList.remove('selected');
+                    });
+                    
+                    // Agregar la clase selected al video seleccionado
+                    this.classList.add('selected');
+                    
                     // Actualizar el valor del input con la canción seleccionada
-                    songInput.value = `${song.title} - ${song.artist}`;
+                    songInput.value = `${video.title} - ${video.artist}`;
                 });
                 
                 videoList.appendChild(videoItem);
